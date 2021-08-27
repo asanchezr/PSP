@@ -46,8 +46,18 @@ jobs:
           labels: automated-pr
           delete-branch: true
 
+      # If the "require pull request reviews" branch protection has been enabled we can optionally auto-approve it
+      # The if condition makes sure we don't approve multiple times if the workflow executes more than once before the pull request merges.
+      - name: Auto approve PR
+        if: steps.create-pr.outputs.pull-request-operation == 'created'
+        uses: juliangruber/approve-pull-request-action@v1
+        with:
+          github-token: ${{ steps.generate-token.outputs.token }}
+          number: ${{ steps.create-pr.outputs.pull-request-number }}
+
       # Auto-merge this PR when all checks have passed - avoiding the need for a human to review it
       - uses: peter-evans/enable-pull-request-automerge@v1
+        if: steps.create-pr.outputs.pull-request-operation == 'created'
         with:
           token: ${{ steps.generate-token.outputs.token }}
           pull-request-number: ${{ steps.create-pr.outputs.pull-request-number }}
