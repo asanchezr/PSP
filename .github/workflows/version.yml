@@ -37,7 +37,7 @@ jobs:
         id: create-pr
         uses: peter-evans/create-pull-request@v3
         with:
-          token: ${{ steps.generate-token.outputs.token }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           title: ${{ env.PR_TITLE }}
           body: ${{ env.PR_BODY }}
           commit-message: ${{ env.PR_TITLE }}
