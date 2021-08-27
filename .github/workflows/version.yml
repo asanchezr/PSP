@@ -12,18 +12,42 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: "14"
-      - name: Bump version number
-        run: |
-          git config user.name "github-actions"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+      # Using a custom GitHub App to authenticate. GITHUB_TOKEN doesn't have enough permissions to create pull requests
+      - uses: tibdex/github-app-token@v1
+        id: generate-token
+        with:
+          app_id: ${{ secrets.CICD_APP_ID }}
+          private_key: ${{ secrets.CICD_PRIVATE_KEY }}
+
+      - name: Bump version number
+        id: bump
+        run: |
           # this just prints the new version number - will not update any files
           NEW_VERSION=$(node ./build/bump-version.js --print-version)
 
           # bump version
           node ./build/bump-version.js --apply
 
-          # create commit
-          git add -A
-          git commit -m "build(release): Bump version to v${NEW_VERSION}"
-          git push
+          # set environment variables
+          echo "PR_TITLE=chore: bump version to v${NEW_VERSION}" >> $GITHUB_ENV
+          echo "PR_BODY=This PR was auto-generated on $(date +%d-%m-%Y) by [psp-cicd-bot]" >> $GITHUB_ENV
+
+      - name: Create Pull Request
+        id: create-pr
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+          title: ${{ env.PR_TITLE }} [skip ci]
+          body: ${{ env.PR_BODY }}
+          commit-message: ${{ env.PR_TITLE }}
+          committer: github-actions <41898282+github-actions[bot]@users.noreply.github.com>
+          branch: bump-version
+          labels: automated-pr
+          delete-branch: true
+
+      # Auto-merge this PR when all checks have passed - avoiding the need for a human to review it
+      - uses: peter-evans/enable-pull-request-automerge@v1
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+          pull-request-number: ${{ steps.create-pr.outputs.pull-request-number }}
