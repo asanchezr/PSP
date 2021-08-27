@@ -40,11 +40,14 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           title: ${{ env.PR_TITLE }}
           body: ${{ env.PR_BODY }}
-          commit-message: ${{ env.PR_TITLE }}
+          commit-message: |
+            ${{ env.PR_TITLE }}
+
+            skip-checks: true
           committer: github-actions <41898282+github-actions[bot]@users.noreply.github.com>
           branch: bump-version
-          branch-suffix: timestamp
           labels: automated-pr
+          delete-branch: true
 
       # If the "require pull request reviews" branch protection has been enabled we can optionally auto-approve it
       # The if condition makes sure we don't approve multiple times if the workflow executes more than once before the pull request merges.
