@@ -30,7 +30,7 @@ jobs:
           node ./build/bump-version.js --apply
 
           # set environment variables
-          echo "PR_TITLE=chore: bump version to v${NEW_VERSION}" >> $GITHUB_ENV
+          echo "PR_TITLE=chore: bump version to v${NEW_VERSION} [skip ci]" >> $GITHUB_ENV
           echo "PR_BODY=This PR was auto-generated on $(date +%d-%m-%Y) by [psp-cicd-bot]" >> $GITHUB_ENV
 
       - name: Create Pull Request
@@ -38,16 +38,26 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ steps.generate-token.outputs.token }}
-          title: ${{ env.PR_TITLE }} [skip ci]
+          title: ${{ env.PR_TITLE }}
           body: ${{ env.PR_BODY }}
           commit-message: ${{ env.PR_TITLE }}
           committer: github-actions <41898282+github-actions[bot]@users.noreply.github.com>
           branch: bump-version
+          branch-suffix: timestamp
           labels: automated-pr
-          delete-branch: true
+
+      # If the "require pull request reviews" branch protection has been enabled we can optionally auto-approve it
+      # The if condition makes sure we don't approve multiple times if the workflow executes more than once before the pull request merges.
+      - name: Auto approve PR
+        if: steps.create-pr.outputs.pull-request-operation == 'created'
+        uses: juliangruber/approve-pull-request-action@v1
+        with:
+          github-token: ${{ steps.generate-token.outputs.token }}
+          number: ${{ steps.create-pr.outputs.pull-request-number }}
 
       # Auto-merge this PR when all checks have passed - avoiding the need for a human to review it
       - uses: peter-evans/enable-pull-request-automerge@v1
+        if: steps.create-pr.outputs.pull-request-operation == 'created'
         with:
           token: ${{ steps.generate-token.outputs.token }}
           pull-request-number: ${{ steps.create-pr.outputs.pull-request-number }}
