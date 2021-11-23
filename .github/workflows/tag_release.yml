@@ -2,7 +2,7 @@ name: Tag Release
 
 on:
   push:
-    branches: [master]
+    branches: [staging]
 
 jobs:
   tag_release:
@@ -18,7 +18,7 @@ jobs:
 
       - name: Create Release
         id: create_release
-        run: make release repo=asanchezr/PSP
+        run: make release repo=asanchezr/PSP branch=staging
 
       - name: Post notification in MS Teams
         run: |
