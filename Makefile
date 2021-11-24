@@ -105,10 +105,9 @@ release: | check-github-auth ## Creates a new github release
 	$(info Using tag: $(tag))
 	$(info Using repo: $(repo))
 	$(info Using target branch: $(branch))
-	@git fetch --tags origin
-	@git tag -d $(tag)
-	@git push origin :refs/tags/$(tag)
-	@gh release create $(tag) -R $(repo) --target $(branch) --title $(tag) --notes "# Release $(tag) ($(CURRENT_DATE))"
+	git tag -a -f $(tag) $(branch) -m "Release $(tag)"
+	git push origin --tags
+	gh release create $(tag) -R $(repo) --target $(branch) --title $(tag) --notes "# Release $(tag) ($(CURRENT_DATE))"
 
 ##############################################################################
 # DevSecOps
