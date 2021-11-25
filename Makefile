@@ -96,18 +96,27 @@ endif
 CURRENT_VERSION := $(shell build/version.sh)
 CURRENT_DATE := $(shell date +'%b %d, %Y')
 tag = v$(CURRENT_VERSION)
-branch = master
 repo = bcgov/psp
+branch = HEAD
+release_notes = Release $(tag) ($(CURRENT_DATE))
+
+.PHONE: tag
+tag: ## Creates a pre-release tag
+	$(info Using tag: $(tag))
+	$(info Using repo: $(repo))
+	@git tag -a -f $(tag) $(branch) -m "Release $(tag)"
+	@git push --tags
 
 .PHONY: release
 release: | check-github-auth ## Creates a new github release
 	$(info Releasing version $(CURRENT_VERSION))
 	$(info Using tag: $(tag))
 	$(info Using repo: $(repo))
-	$(info Using target branch: $(branch))
-	@git tag -a -f $(tag) $(branch) -m "Release $(tag)"
-	@git push origin --tags
-	@gh release create $(tag) -R $(repo) --target $(branch) --title $(tag) --notes "# Release $(tag) ($(CURRENT_DATE))"
+ifdef changelog
+	gh release create $(tag) -R $(repo) --title $(tag) --notes-file $(changelog)
+else
+	gh release create $(tag) -R $(repo) --title $(tag) --notes "$(release_notes)"
+endif
 
 ##############################################################################
 # DevSecOps
