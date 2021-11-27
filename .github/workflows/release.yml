@@ -41,5 +41,12 @@ jobs:
           make release tag="${GITHUB_REF#refs/tags/}" changelog=changelog.md
 
       - name: Post notification in MS Teams
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MS_TEAMS_NOTIFY_URL: ${{ secrets.MS_TEAMS_NOTIFY_URL }}
+        if: env.MS_TEAMS_NOTIFY_URL != ''
         run: |
-          echo "Teams notification sent..."
+          echo "Send notification to MS Teams..."
+          export RELEASE_URL=$(gh release view ${GITHUB_REF#refs/tags/} --json url --jq '.url')
+          curl -H 'Content-Type: application/json' "${{ env.MS_TEAMS_NOTIFY_URL }}" \
+          -d '{"@context":"https://schema.org/extensions","@type":"MessageCard","themeColor":"0078D7","title":"Release ${GITHUB_REF#refs/tags/} created on repository ${{ github.repository }}","text":"${{ steps.build_changelog.outputs.changelog }}", "potentialAction": [{"@type": "OpenUri","name": "View in GitHub","targets": [{"os": "default","uri": ${RELEASE_URL}}]}]}'
