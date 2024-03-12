@@ -49,7 +49,7 @@ namespace Pims.Api.Test.Controllers
         {
             // Arrange
             PimsAgreement agreement = new PimsAgreement() { AgreementId = 10, AcquisitionFileId = 1 };
-            this._service.Setup(m => m.UpdateAgreement(It.IsAny<long>() ,It.IsAny<PimsAgreement>())).Returns(agreement);
+            this._service.Setup(m => m.UpdateAgreement(It.IsAny<long>(), It.IsAny<PimsAgreement>())).Returns(agreement);
 
             // Act
             var result = this._controller.UpdateAcquisitionFileAgreement(1, 10, this._mapper.Map<AgreementModel>(agreement));

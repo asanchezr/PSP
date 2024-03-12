@@ -63,7 +63,7 @@ namespace Pims.Dal.Test.Repositories
             var repository = helper.CreateRepository<ExpropriationPaymentRepository>(user);
 
             // Act
-            Action act = ()=> repository.GetById(2);
+            Action act = () => repository.GetById(2);
 
             // Assert
             act.Should().Throw<KeyNotFoundException>();
@@ -147,7 +147,7 @@ namespace Pims.Dal.Test.Repositories
             var user = PrincipalHelper.CreateForPermission(Permissions.AcquisitionFileView);
 
             var acqFile = EntityHelper.CreateAcquisitionFile();
-            acqFile.PimsExpropriationPayments = new List<PimsExpropriationPayment>() { new PimsExpropriationPayment() { PimsExpropPmtPmtItems = new List<PimsExpropPmtPmtItem>() { new PimsExpropPmtPmtItem() { PaymentItemTypeCode = "RECEIPT"} } } };
+            acqFile.PimsExpropriationPayments = new List<PimsExpropriationPayment>() { new PimsExpropriationPayment() { PimsExpropPmtPmtItems = new List<PimsExpropPmtPmtItem>() { new PimsExpropPmtPmtItem() { PaymentItemTypeCode = "RECEIPT" } } } };
             var payment = acqFile.PimsExpropriationPayments.FirstOrDefault();
 
             var context = helper.CreatePimsContext(user, true).AddAndSaveChanges(acqFile);

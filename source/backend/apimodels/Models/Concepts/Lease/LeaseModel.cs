@@ -158,7 +158,7 @@ namespace Pims.Api.Models.Concepts.Lease
         /// </summary>
         public IEnumerable<LeaseTenantModel> Tenants { get; set; }
 
-         /// <summary>
+        /// <summary>
         /// get/set - A collection of the terms for this lease.
         /// </summary>
         public IEnumerable<LeaseTermModel> Terms { get; set; }

@@ -98,7 +98,7 @@ namespace Pims.Dal.Test.Repositories
             var repository = helper.CreateRepository<OrganizationRepository>(user);
 
             // Act
-            Action act = ()=> repository.GetById(2);
+            Action act = () => repository.GetById(2);
 
             // Assert
             act.Should().Throw<KeyNotFoundException>();
@@ -134,7 +134,7 @@ namespace Pims.Dal.Test.Repositories
             var user = PrincipalHelper.CreateForPermission(Permissions.AcquisitionFileView);
 
             var org = EntityHelper.CreateOrganization(1, "org");
-            org.PimsContactMethods = new List<PimsContactMethod>() { new PimsContactMethod() { ContactMethodTypeCode = "MAILING", ContactMethodValue = "1234"} };
+            org.PimsContactMethods = new List<PimsContactMethod>() { new PimsContactMethod() { ContactMethodTypeCode = "MAILING", ContactMethodValue = "1234" } };
 
             var context = helper.CreatePimsContext(user, true).AddAndSaveChanges(org);
             var repository = helper.CreateRepository<OrganizationRepository>(user);

@@ -41,7 +41,9 @@ namespace Pims.Dal.Test.Repositories
 
             var document = new PimsDocument() { DocumentStatusTypeCodeNavigation = new PimsDocumentStatusType() { DocumentStatusTypeCode = "test", Description = "Active", DbCreateUserid = "test", DbLastUpdateUserid = "test" }, DocumentType = new PimsDocumentTyp() { DocumentType = "IMAGE", DocumentTypeDescription = "Image", DbCreateUserid = "test", DbLastUpdateUserid = "test" }, FileName = "test.txt" };
             var propertyActivityFileDocument = new PimsPropertyActivityDocument() { Document = document };
-            PimsPropertyActivity pimsPropertyActivity = new PimsPropertyActivity() { PimsPropertyActivityDocuments = new List<PimsPropertyActivityDocument>() { propertyActivityFileDocument },
+            PimsPropertyActivity pimsPropertyActivity = new PimsPropertyActivity()
+            {
+                PimsPropertyActivityDocuments = new List<PimsPropertyActivityDocument>() { propertyActivityFileDocument },
                 PropMgmtActivityStatusTypeCode = "ACTIVE",
                 PropMgmtActivitySubtypeCode = "ACTIVE",
                 PropMgmtActivityTypeCode = "test"

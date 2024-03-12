@@ -124,7 +124,7 @@ namespace Pims.Api.Test.Controllers
 
             // Act
             var model = _mapper.Map<DispositionFileModel>(dispFile);
-            var result = this._controller.AddDispositionFile(model, new string[] { } );
+            var result = this._controller.AddDispositionFile(model, new string[] { });
 
             // Assert
             this._service.Verify(m => m.Add(It.IsAny<PimsDispositionFile>(), It.IsAny<IEnumerable<UserOverrideCode>>()), Times.Once());
@@ -189,7 +189,7 @@ namespace Pims.Api.Test.Controllers
             // Assert
             this._service.Verify(m => m.UpdateDispositionFileSale(It.IsAny<PimsDispositionSale>()), Times.Once());
         }
-        
+
         /// <summary>
         /// Get All Offers by Disposition File's Id.
         /// </summary>

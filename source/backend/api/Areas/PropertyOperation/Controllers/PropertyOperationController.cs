@@ -80,7 +80,7 @@ namespace Pims.Api.Areas.PropertyOperation.Controllers
 
             var operationTypeCode = operations.FirstOrDefault().PropertyOperationTypeCode;
             var propertyOperations = _mapper.Map<IEnumerable<Dal.Entities.PimsPropertyOperation>>(operations);
-            if(!Enum.TryParse(operationTypeCode?.Id, out PropertyOperationTypes propertyOperationTypes))
+            if (!Enum.TryParse(operationTypeCode?.Id, out PropertyOperationTypes propertyOperationTypes))
             {
                 return BadRequest("Unsupported property operation type code.");
             }

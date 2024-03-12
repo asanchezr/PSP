@@ -112,13 +112,13 @@ namespace Pims.Api.Test.Controllers.PropertyOperation
             // Arrange
             var helper = new TestHelper();
             var controller = helper.CreateController<PropertyOperationController>(Permissions.PropertyEdit);
-            IEnumerable<PropertyOperationModel> pimsPropertyOperations = new List<PropertyOperationModel>(){};
+            IEnumerable<PropertyOperationModel> pimsPropertyOperations = new List<PropertyOperationModel>() { };
 
 
             var service = helper.GetService<Mock<IPropertyOperationService>>();
 
             // Act
-            BadRequestObjectResult action = (BadRequestObjectResult) controller.RunPropertyOperations(pimsPropertyOperations);
+            BadRequestObjectResult action = (BadRequestObjectResult)controller.RunPropertyOperations(pimsPropertyOperations);
 
             // Assert
             action.StatusCode.Should().Be(400);

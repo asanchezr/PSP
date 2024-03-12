@@ -97,7 +97,7 @@ namespace Pims.Dal.Test.Repositories
             var repository = helper.CreateRepository<PersonRepository>(user);
 
             // Act
-            Action act = ()=> repository.GetById(2);
+            Action act = () => repository.GetById(2);
 
             // Assert
             act.Should().Throw<KeyNotFoundException>();
@@ -133,7 +133,7 @@ namespace Pims.Dal.Test.Repositories
             var user = PrincipalHelper.CreateForPermission(Permissions.AcquisitionFileView);
 
             var person = EntityHelper.CreatePerson(1, "last", "first");
-            person.PimsContactMethods = new List<PimsContactMethod>() { new PimsContactMethod() { ContactMethodTypeCode = "MAILING", ContactMethodValue = "1234"} };
+            person.PimsContactMethods = new List<PimsContactMethod>() { new PimsContactMethod() { ContactMethodTypeCode = "MAILING", ContactMethodValue = "1234" } };
 
             var context = helper.CreatePimsContext(user, true).AddAndSaveChanges(person);
             var repository = helper.CreateRepository<PersonRepository>(user);

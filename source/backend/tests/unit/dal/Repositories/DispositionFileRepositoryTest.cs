@@ -445,7 +445,8 @@ namespace Pims.Dal.Test.Repositories
             };
             _helper.AddAndSaveChanges(dispFile);
 
-            var updatedSale = new PimsDispositionSale(){
+            var updatedSale = new PimsDispositionSale()
+            {
                 DispositionSaleId = 1,
                 SaleFinalAmt = 3000,
                 DspPurchAgentId = 10,
@@ -468,7 +469,7 @@ namespace Pims.Dal.Test.Repositories
             Assert.Equal(2000, updatedAgent.PersonId);
         }
 
-                [Fact]
+        [Fact]
         public void UpdateDisposition_Sale_PurchaserSolicitor_Removed()
         {
             // Arrange
@@ -563,7 +564,8 @@ namespace Pims.Dal.Test.Repositories
             };
             _helper.AddAndSaveChanges(dispFile);
 
-            var updatedSale = new PimsDispositionSale(){
+            var updatedSale = new PimsDispositionSale()
+            {
                 DispositionSaleId = 1,
                 SaleFinalAmt = 3000,
                 DspPurchSolicitorId = 10,

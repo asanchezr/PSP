@@ -126,7 +126,7 @@ namespace Pims.Dal.Keycloak
             if (resetRoles)
             {
                 var roleIds = euser.PimsUserRoles.Select(ur => ur.RoleId).ToArray();
-                for(int i = 0; i < roleIds.Length; i++)
+                for (int i = 0; i < roleIds.Length; i++)
                 {
                     _userRepository.RemoveRole(euser, roleIds[i]);
                 }

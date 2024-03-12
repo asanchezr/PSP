@@ -74,9 +74,15 @@ namespace Pims.Dal.Test.Repositories
             var helper = new TestHelper();
             var user = PrincipalHelper.CreateForPermission(Permissions.ProjectView);
 
-            var project = new PimsProject() { Description = "test project", RegionCode = 1, Code = "551234",
-                ProjectStatusTypeCode = "ACTIVE", ProjectStatusTypeCodeNavigation = new PimsProjectStatusType() { Id = "ACTIVE", Description = "Active", DbLastUpdateUserid = "test", DbCreateUserid = "test" }, 
-                RegionCodeNavigation = new PimsRegion() { Id = 1, DbCreateUserid = "test", DbLastUpdateUserid = "test", RegionName = "test region" } };
+            var project = new PimsProject()
+            {
+                Description = "test project",
+                RegionCode = 1,
+                Code = "551234",
+                ProjectStatusTypeCode = "ACTIVE",
+                ProjectStatusTypeCodeNavigation = new PimsProjectStatusType() { Id = "ACTIVE", Description = "Active", DbLastUpdateUserid = "test", DbCreateUserid = "test" },
+                RegionCodeNavigation = new PimsRegion() { Id = 1, DbCreateUserid = "test", DbLastUpdateUserid = "test", RegionName = "test region" }
+            };
 
             var context = helper.CreatePimsContext(user, true).AddAndSaveChanges(project);
             var repository = helper.CreateRepository<ProjectRepository>(user);

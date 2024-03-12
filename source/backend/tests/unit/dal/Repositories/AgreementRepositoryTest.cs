@@ -33,7 +33,7 @@ namespace Pims.Dal.Test.Repositories
             var helper = new TestHelper();
             var user = PrincipalHelper.CreateForPermission(Permissions.AcquisitionFileAdd);
             var acqFile = EntityHelper.CreateAcquisitionFile();
-            acqFile.Project = new PimsProject() { Id = 1, Description = "project", ProjectStatusTypeCode ="draft" };
+            acqFile.Project = new PimsProject() { Id = 1, Description = "project", ProjectStatusTypeCode = "draft" };
             var agreement = new PimsAgreement()
             {
                 AcquisitionFile = acqFile,

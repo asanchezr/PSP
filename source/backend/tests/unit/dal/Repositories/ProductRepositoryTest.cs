@@ -30,7 +30,7 @@ namespace Pims.Dal.Test.Repositories
             var user = PrincipalHelper.CreateForPermission(Permissions.NoteAdd);
 
             var initialProduct = new PimsProduct() { Code = "code1", Description = "desc1", };
-            var project = new PimsProject() { Description ="project", ProjectStatusTypeCode = "ACTIVE", PimsProjectProducts = new List<PimsProjectProduct>() { new PimsProjectProduct() { Product = initialProduct } } };
+            var project = new PimsProject() { Description = "project", ProjectStatusTypeCode = "ACTIVE", PimsProjectProducts = new List<PimsProjectProduct>() { new PimsProjectProduct() { Product = initialProduct } } };
 
             var context = helper.CreatePimsContext(user, true).AddAndSaveChanges(project);
             var repository = helper.CreateRepository<ProductRepository>(user);
