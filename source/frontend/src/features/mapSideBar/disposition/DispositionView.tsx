@@ -109,6 +109,12 @@ export const DispositionView: React.FunctionComponent<IDispositionViewProps> = (
             onSuccess={onSuccess}
             updateFileProperties={onUpdateProperties}
             confirmBeforeAdd={confirmBeforeAdd}
+            confirmBeforeAddMessage={
+              <>
+                <p>This property has already been added to one or more disposition files.</p>
+                <p>Do you want to acknowledge and proceed?</p>
+              </>
+            }
             canRemove={canRemove}
             formikRef={formikRef}
           />
