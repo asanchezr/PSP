@@ -1,5 +1,12 @@
 import axios from 'axios';
-import { geoJSON, LatLngBounds, LeafletEvent, LeafletMouseEvent, Map } from 'leaflet';
+import {
+  geoJSON,
+  LatLngBounds,
+  LeafletEvent,
+  LeafletMouseEvent,
+  Map,
+  Popup as LeafletPopup,
+} from 'leaflet';
 import { isEqual } from 'lodash';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
@@ -22,7 +29,7 @@ import { useWorklistContext } from '@/features/properties/worklist/context/Workl
 import WorklistMapClickMonitor from '@/features/properties/worklist/WorklistMapClickMonitor';
 import RightSideContainer from '@/features/rightSideLayout/RightSideContainer';
 import { useTenant } from '@/tenants';
-import { exists, firstOrNull } from '@/utils';
+import { exists, firstOrNull, isEmptyMapFeatureData } from '@/utils';
 
 import { defaultBounds, defaultLatLng } from './constants';
 import BasemapToggle, { BasemapToggleEvent } from './leaflet/Control/BaseMapToggle/BasemapToggle';
@@ -35,7 +42,9 @@ import { PropertyQuickInfoContainer } from './leaflet/Control/Search/PropertyQui
 import SearchControl from './leaflet/Control/SearchControl/SearchControl';
 import WorklistControl from './leaflet/Control/WorklistControl/WorklistControl';
 import { ZoomOutButton } from './leaflet/Control/ZoomOut/ZoomOutButton';
+import { LocationPopupContainer } from './leaflet/LayerPopup/LocationPopupContainer';
 import { FilePropertiesLayer } from './leaflet/Layers/FilePropertiesLayer';
+import HighwayParcelsLayer from './leaflet/Layers/HighwayParcelsLayer';
 import { LeafletLayerListener } from './leaflet/Layers/LeafletLayerListener';
 import MapsearchParcelsLayer from './leaflet/Layers/MapsearchParcelsLayer';
 import { MarkerLayer } from './leaflet/Layers/MarkerLayer';
@@ -66,6 +75,7 @@ const MapLeafletView: React.FC<React.PropsWithChildren<MapLeafletViewProps>> = (
   const [zoom, setZoom] = useState(defaultZoom);
   const [isMapReady, setIsMapReady] = useState(false);
 
+  const popupRef = useRef<LeafletPopup>(null);
   const mapRef = useRef<Map | null>(null);
 
   const [activeFeatureLayer, setActiveFeatureLayer] = useState<L.GeoJSON>();
@@ -140,6 +150,11 @@ const MapLeafletView: React.FC<React.PropsWithChildren<MapLeafletViewProps>> = (
     mapMachineRequestedFitBounds,
     zoom,
   ]);
+
+  const isSearchActive = useMemo(
+    () => !isEmptyMapFeatureData(mapMachine.mapFeatureData),
+    [mapMachine.mapFeatureData],
+  );
 
   const {
     mapLocationFeatureDataset,
@@ -272,6 +287,11 @@ const MapLeafletView: React.FC<React.PropsWithChildren<MapLeafletViewProps>> = (
           <LeafletLayerListener pane="dataLayers" />
         </Pane>
 
+        {mapMachine.showPopup && (
+          // Draws the popup on top of the map
+          <LocationPopupContainer ref={popupRef} />
+        )}
+
         <LegendControl />
         <ZoomOutButton />
         <ScaleControl position="bottomleft" metric={true} imperial={false} />
@@ -279,7 +299,7 @@ const MapLeafletView: React.FC<React.PropsWithChildren<MapLeafletViewProps>> = (
           <Row noGutters className="flex-nowrap">
             <Col xs="auto">
               <LayersControl onToggle={mapMachine.toggleMapLayerControl} />
-              <SearchControl onToggle={mapMachine.toggleMapSearchControl} />
+              <SearchControl active={isSearchActive} onToggle={mapMachine.toggleMapSearchControl} />
               <WorklistControl
                 active={isWorklistActive}
                 onToggle={mapMachine.toggleWorkListControl}
@@ -307,8 +327,12 @@ const MapLeafletView: React.FC<React.PropsWithChildren<MapLeafletViewProps>> = (
           <WorklistMapClickMonitor />
         </Pane>
 
-        <Pane name="searchlistParcels" style={{ zIndex: 500 }}>
+        <Pane name="searchlistParcels" style={{ zIndex: 400 }}>
           <MapsearchParcelsLayer />
+        </Pane>
+
+        <Pane name="highwaylistParcels" style={{ zIndex: 300 }}>
+          <HighwayParcelsLayer />
         </Pane>
 
         {/* Client-side "layer" to highlight file property boundaries (when in the context of a file) */}

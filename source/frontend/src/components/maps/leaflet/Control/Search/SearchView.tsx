@@ -30,6 +30,8 @@ import { PIMS_Property_Location_View } from '@/models/layers/pimsPropertyLocatio
 import { exists } from '@/utils';
 import { isStrataCommonProperty } from '@/utils/propertyUtils';
 
+import { HighwayListView } from './HighwayList';
+
 export interface ISearchViewProps {
   onFilterChange: (filter: IPropertyFilter) => void;
   propertyFilter: IPropertyFilter;
@@ -174,10 +176,10 @@ export const SearchView: React.FC<ISearchViewProps> = props => {
   return (
     <>
       <StyledWrapper>
-        <Section>
+        <Section className="my-0">
           <Button onClick={onOpenPropertyList}>Search PIMS information</Button>
         </Section>
-        <Section>
+        <Section className="my-0 pt-0">
           <PropertyFilter
             defaultFilter={{ ...defaultPropertyFilter }}
             propertyFilter={props.propertyFilter}
@@ -186,6 +188,7 @@ export const SearchView: React.FC<ISearchViewProps> = props => {
           />
         </Section>
         <Section
+          className="my-0 py-0"
           header={
             <SimpleSectionHeader title="Results (PMBC)">
               <MoreOptionsMenu options={menuOptions} ariaLabel="search pmbc results more options" />
@@ -197,6 +200,7 @@ export const SearchView: React.FC<ISearchViewProps> = props => {
           <ParcelListContainer View={ParcelListView} parcels={propertyProjections} />
         </Section>
         <Section
+          className="my-0 py-0"
           header={
             <SimpleSectionHeader title="Results (PIMS)">
               <MoreOptionsMenu options={menuOptions} ariaLabel="search pims results more options" />
@@ -207,6 +211,10 @@ export const SearchView: React.FC<ISearchViewProps> = props => {
         >
           <ParcelListContainer View={ParcelListView} parcels={pimsPropertyProjections} />
         </Section>
+        {exists(props.searchResult?.highwayPlanFeatures) &&
+          props.searchResult.highwayPlanFeatures.features.length > 0 && (
+            <HighwayListView searchResult={props.searchResult} />
+          )}
       </StyledWrapper>
     </>
   );

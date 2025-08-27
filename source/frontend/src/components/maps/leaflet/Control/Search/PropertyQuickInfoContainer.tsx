@@ -51,16 +51,22 @@ export const PropertyQuickInfoContainer: React.FC<React.PropsWithChildren> = () 
     [mapLocationFeatureDataset?.parcelFeatures?.length],
   );
 
+  const isEmpty = useMemo(
+    () => mapLocationFeatureDataset?.parcelFeatures?.length === 0,
+    [mapLocationFeatureDataset?.parcelFeatures?.length],
+  );
+
   const getOwnerInfo = useCallback(
     async (pid: string) => {
       if (isValidString(pid)) {
         const ltsaOrders = await getLtsaExecute(pid);
-        const titleOwners = ltsaOrders.titleOrders
-          .flatMap(x => x?.orderedProduct?.fieldedData?.ownershipGroups)
-          .flatMap(x => x?.titleOwners)
-          .filter(exists);
+        const titleOwners = ltsaOrders?.titleOrders
+          ?.flatMap(x => x?.orderedProduct?.fieldedData?.ownershipGroups)
+          ?.flatMap(x => x?.titleOwners)
+          ?.filter(exists);
 
-        const names = titleOwners.map(x => formatNames([x.givenName, x.lastNameOrCorpName1]));
+        const names =
+          titleOwners?.map(x => formatNames([x.givenName, x.lastNameOrCorpName1])) ?? [];
         setOwnerNames(names.join(', '));
       }
     },
@@ -249,9 +255,13 @@ export const PropertyQuickInfoContainer: React.FC<React.PropsWithChildren> = () 
     onCreateResearchFile,
   ]);
 
+  const isLoading = useMemo(() => {
+    return mapMachine.isLoading || ltsaRequestWrapper.loading;
+  }, [ltsaRequestWrapper.loading, mapMachine.isLoading]);
+
   return (
     <StyledContainer isMinimized={isMinimized} isVisible={isVisible}>
-      <LoadingBackdrop show={mapMachine.isLoading} parentScreen />
+      <LoadingBackdrop show={isLoading} parentScreen />
       <StyledHeaderRow noGutters>
         <Col xs="1">
           {showViewPropertyInfo && (
@@ -273,7 +283,7 @@ export const PropertyQuickInfoContainer: React.FC<React.PropsWithChildren> = () 
           Property
         </Col>
         <Col xs="1">
-          <TooltipWrapper tooltipId={`property-quick-info-zoom`} tooltip={'Zoom to property'}>
+          <TooltipWrapper tooltipId={`property-quick-info-zoom`} tooltip={'Zoom to location'}>
             <StyledIconWrapper>
               <FaSearchPlus
                 size={18}
@@ -325,9 +335,10 @@ export const PropertyQuickInfoContainer: React.FC<React.PropsWithChildren> = () 
           </TooltipWrapper>
         </Col>
       </StyledHeaderRow>
-      {!isMinimized && (
+      {!isMinimized && isLoading === false && (
         <>
-          {!hasMultipleProperties && (
+          {isEmpty && <div className="pt-8">No property found in this location</div>}
+          {!hasMultipleProperties && !isEmpty && (
             <StyledInfoWrapper>
               <Row noGutters>
                 <Col>
@@ -374,6 +385,10 @@ const StyledContainer = styled.div<{ isMinimized: boolean; isVisible: boolean }>
 const StyledInfoWrapper = styled.div`
   font-size: 1.4rem;
   padding: 1rem;
+  overflow-x: hide;
+  overflow-y: auto;
+  height: 21rem;
+  width: 100%;
 `;
 
 const StyledHeaderRow = styled(Row)`

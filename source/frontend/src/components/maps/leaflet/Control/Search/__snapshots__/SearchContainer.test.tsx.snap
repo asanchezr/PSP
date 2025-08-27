@@ -36,9 +36,7 @@ exports[`SearchContainer component > renders as expected 1`] = `
 }
 
 .c2.btn .Button__value {
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
+  width: auto;
 }
 
 .c2.btn:hover {
@@ -309,7 +307,7 @@ exports[`SearchContainer component > renders as expected 1`] = `
     class="c0"
   >
     <div
-      class="c1 form-section"
+      class="c1 form-section my-0"
     >
       <div
         class="collapse show"
@@ -327,7 +325,7 @@ exports[`SearchContainer component > renders as expected 1`] = `
       </div>
     </div>
     <div
-      class="c1 form-section"
+      class="c1 form-section my-0 pt-0"
     >
       <div
         class="collapse show"
@@ -340,7 +338,7 @@ exports[`SearchContainer component > renders as expected 1`] = `
             class="row no-gutters"
           >
             <div
-              class="col-auto"
+              class="col-12"
             >
               <div
                 class="idir-input-group form-group"
@@ -410,7 +408,7 @@ exports[`SearchContainer component > renders as expected 1`] = `
               </div>
             </div>
             <div
-              class="col"
+              class="col-12"
             >
               <div
                 class="input form-group"
@@ -504,7 +502,7 @@ exports[`SearchContainer component > renders as expected 1`] = `
       </div>
     </div>
     <div
-      class="c1 form-section"
+      class="c1 form-section my-0 py-0"
     >
       <h2
         class="c3"
@@ -597,7 +595,7 @@ exports[`SearchContainer component > renders as expected 1`] = `
       </div>
     </div>
     <div
-      class="c1 form-section"
+      class="c1 form-section my-0 py-0"
     >
       <h2
         class="c3"

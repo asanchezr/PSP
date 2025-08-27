@@ -171,6 +171,13 @@ export const MapStateMachineProvider: React.FC<React.PropsWithChildren<unknown>>
         } else if (exists(parcelFeature?.properties?.PIN)) {
           const parsedPin = pinParser(parcelFeature.properties.PIN);
           history.push(`/mapview/sidebar/non-inventory-property/pin/${parsedPin}`);
+        } else if (
+          exists(selectedFeatureData?.location?.lat) &&
+          exists(selectedFeatureData?.location?.lng)
+        ) {
+          history.push(
+            `/mapview/sidebar/location/lat/${selectedFeatureData?.location?.lat}/lng/${selectedFeatureData?.location?.lng}`,
+          );
         }
       },
     },
@@ -565,7 +572,11 @@ export const MapStateMachineProvider: React.FC<React.PropsWithChildren<unknown>>
 
   // disable map popup when repositioning file markers
   const showPopup = useMemo(() => {
-    return state.context.mapLocationFeatureDataset !== null && !isRepositioning;
+    const parcelFeatures = state.context?.mapLocationFeatureDataset?.parcelFeatures;
+    if (exists(parcelFeatures)) {
+      return parcelFeatures.length > 1 && !isRepositioning;
+    }
+    return false;
   }, [isRepositioning, state.context.mapLocationFeatureDataset]);
 
   const isShowingMapFilter = useMemo(() => {
