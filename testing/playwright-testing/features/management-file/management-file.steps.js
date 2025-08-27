@@ -7,7 +7,7 @@ const {
 const { expect } = require("@playwright/test");
 
 let managementFile = {};
-let managementFileCode = '';
+let managementFileCode = "";
 
 Given(
   "I create a new Management File with row number {int}",
@@ -176,8 +176,7 @@ When("I add Properties to the Management File", async function () {
 
   //Search for a property by Latitude and Longitude
   if (
-    managementFile.ManagementSearchProperties.LatitudeLongitude
-      .LatitudeDegree
+    managementFile.ManagementSearchProperties.LatitudeLongitude.LatitudeDegree
   ) {
     await this.sharedFileProperties.selectPropertyByLongLant(
       managementFile.ManagementSearchProperties.LatitudeLongitude
@@ -218,7 +217,9 @@ When(
 
     //Search for an existing Management File
     await this.searchManagementFiles.navigateToSearchManagement();
-    await this.searchManagementFiles.filterManagementFiles({mgmtfile: managementFileCode});
+    await this.searchManagementFiles.filterManagementFiles({
+      mgmtfile: managementFileCode,
+    });
     await this.searchManagementFiles.selectFirstOption();
 
     //Navigate to Edit Management File's Properties
@@ -261,9 +262,7 @@ When(
     expect(this.searchManagementFiles.mgmtTableResultNumber()).toBe(10);
 
     await this.sharedPagination.choosePaginationOption(20);
-    expect(
-      this.searchManagementFiles.mgmtTableResultNumber()
-    ).toBeLessThan(20);
+    expect(this.searchManagementFiles.mgmtTableResultNumber()).toBeLessThan(20);
 
     //await this.sharedPagination.choosePaginationOption(50);
     //await expect(this.searchManagementFiles.mgmtTableResultNumber()).toBe(50);
@@ -291,9 +290,7 @@ When(
     const firstHistoricalAscResult =
       await this.searchManagementFiles.firstMgmtHistoricalFile();
 
-    expect(firstHistoricalDescResult).not.toEqual(
-      firstHistoricalAscResult
-    );
+    expect(firstHistoricalDescResult).not.toEqual(firstHistoricalAscResult);
 
     //Verify Column Sorting by Purpose
     await this.searchManagementFiles.orderByMgmtPurpose();
@@ -336,12 +333,18 @@ When(
     await this.sharedPagination.resetSearch();
 
     //Filter Acquisition Files
-    await this.searchManagementFiles.filterManagementFiles({pid: "003-549-551", mgmtfile: "Management from Jonathan Doe", status: "Cancelled"});
-    expect(this.searchManagementFiles.searchFoundResults()).not
-      .toBeTruthy;
+    await this.searchManagementFiles.filterManagementFiles({
+      pid: "003-549-551",
+      mgmtfile: "Management from Jonathan Doe",
+      status: "Cancelled",
+    });
+    expect(this.searchManagementFiles.searchFoundResults()).not.toBeTruthy;
 
     //Look for the last created Acquisition File
-    await this.searchManagementFiles.filterManagementFiles({mgmtfile: managementFile.ManagementName, status: managementFile.ManagementStatus});
+    await this.searchManagementFiles.filterManagementFiles({
+      mgmtfile: managementFile.ManagementName,
+      status: managementFile.ManagementStatus,
+    });
   }
 );
 

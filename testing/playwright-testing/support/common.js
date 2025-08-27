@@ -5,11 +5,7 @@ function getUserCredential(envKey) {
 }
 
 function clickSaveButton(page, waitElement) {
-  clickAndWaitFor(
-      page,
-      "button[data-testid='save-button']",
-      waitElement
-    );
+  clickAndWaitFor(page, "button[data-testid='save-button']", waitElement);
 }
 
 async function cancelAction(page) {

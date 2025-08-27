@@ -1,7 +1,4 @@
-const {
-  clickSaveButton,
-  clickAndWaitFor,
-} = require("../../support/common.js");
+const { clickSaveButton, clickAndWaitFor } = require("../../support/common.js");
 const { expect } = require("@playwright/test");
 
 class SharedFileProperties {
@@ -12,7 +9,7 @@ class SharedFileProperties {
   async navigateToAddPropertiesToFile() {
     clickAndWaitFor(
       this.page,
-     "button[title='Change properties']",
+      "button[title='Change properties']",
       "a[data-rb-event-key='list']"
     );
   }
@@ -20,7 +17,7 @@ class SharedFileProperties {
   async navigateToSearchTab() {
     clickAndWaitFor(
       this.page,
-     "a[data-rb-event-key='list']",
+      "a[data-rb-event-key='list']",
       "input[id='input-pid']"
     );
   }
@@ -107,15 +104,16 @@ class SharedFileProperties {
   }
 
   async selectFirstOptionFromSearch() {
-    const firstResultChoice = await this.page
-      .locator(
-        "div[data-testid='map-properties'] div[class='tbody'] div[class='tr-wrapper']:first-child div input"
-      );
-    await firstResultChoice.waitFor({state: 'visible'});
+    const firstResultChoice = await this.page.locator(
+      "div[data-testid='map-properties'] div[class='tbody'] div[class='tr-wrapper']:first-child div input"
+    );
+    await firstResultChoice.waitFor({ state: "visible" });
     await firstResultChoice.check();
 
-    const addPropertyBttn = await this.page.getByTestId("add-selected-properties-button");
-    await addPropertyBttn.waitFor({state: 'visible'});
+    const addPropertyBttn = await this.page.getByTestId(
+      "add-selected-properties-button"
+    );
+    await addPropertyBttn.waitFor({ state: "visible" });
     await addPropertyBttn.click();
 
     while (
@@ -280,13 +278,14 @@ class SharedFileProperties {
   }
 
   async verifySearchTabPropertiesFeature() {
-
-    const searchPropsTab = await this.page.locator("//a[contains(text(),'Search')]");
+    const searchPropsTab = await this.page.locator(
+      "//a[contains(text(),'Search')]"
+    );
     expect(searchPropsTab).toBeVisible();
 
-    const propertySubtitle = await this.page.locator(
-        "div[data-testid='property-search-selector-section'] h2 div div"
-      ).textContent();
+    const propertySubtitle = await this.page
+      .locator("div[data-testid='property-search-selector-section'] h2 div div")
+      .textContent();
     expect(propertySubtitle).toEqual("Search for a property");
 
     const searchBySelect = await this.page.locator("#input-searchBy");
@@ -301,7 +300,9 @@ class SharedFileProperties {
     const resetButton = await this.page.locator("#reset-button");
     expect(resetButton).toBeVisible();
 
-    const tableHeader = await this.page.locator("div[class='thead thead-light']");
+    const tableHeader = await this.page.locator(
+      "div[class='thead thead-light']"
+    );
     expect(tableHeader).toBeVisible();
 
     await expect(
@@ -381,19 +382,34 @@ class SharedFileProperties {
 
     await this.page.getByTestId("ok-modal-button").click();
 
-    while (await this.page.locator("div.modal-content").isVisible().catch(() => false)) {
-      const modalHeader = this.page.locator("div.modal-header .modal-title.h4").last();
+    while (
+      await this.page
+        .locator("div.modal-content")
+        .isVisible()
+        .catch(() => false)
+    ) {
+      const modalHeader = this.page
+        .locator("div.modal-header .modal-title.h4")
+        .last();
       const modalBody = this.page.locator("div.modal-body").last();
 
-      const modalText = await modalBody.textContent() ?? "";
+      const modalText = (await modalBody.textContent()) ?? "";
 
-      if (modalText.includes("You have added one or more properties to the disposition file")) {
+      if (
+        modalText.includes(
+          "You have added one or more properties to the disposition file"
+        )
+      ) {
         await expect(modalHeader).toContainText("User Override Required");
         await expect(modalBody).toContainText(
           "You have added one or more properties to the disposition file that are not in the MOTI Inventory. Do you want to proceed?"
         );
         await this.sharedModal.mainModalClickOKBttn();
-      } else if (modalText.includes("You have added one or more properties to the management file")) {
+      } else if (
+        modalText.includes(
+          "You have added one or more properties to the management file"
+        )
+      ) {
         await expect(modalHeader).toContainText("User Override Required");
         await expect(modalBody).toContainText(
           "You have added one or more properties to the management file that are not in the MOTI Inventory. To acquire these properties, add them to an acquisition file. Do you want to proceed?"

@@ -15,10 +15,12 @@ Before(async function () {
 
   await this.loginPage.login(username, password);
   await this.page
-    .getByTestId("filter-backdrop-loading").first()
+    .getByTestId("filter-backdrop-loading")
+    .first()
     .waitFor({ state: "hidden", timeout: 20000 });
   await this.page
-    .getByTestId("filter-backdrop-loading").nth(1)
+    .getByTestId("filter-backdrop-loading")
+    .nth(1)
     .waitFor({ state: "hidden", timeout: 20000 });
   await this.page
     .locator("#layersControlButton")
