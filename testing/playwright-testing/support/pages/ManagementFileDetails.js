@@ -46,7 +46,8 @@ class ManagementFileDetails {
   }
 
   async saveManagementFile() {
-    clickSaveButton(this.page);
+    //clickSaveButton(this.page, "button[title='Edit management file']");
+    this.page.locator("button[data-testid='save-button']").click();
 
     while (
       (await this.page.locator("div[class='modal-content']").count()) > 0

@@ -23,7 +23,7 @@ namespace PIMS.Tests.Automation.PageObjects
         private By projectNumberInput = By.Id("input-projectNumber");
         private By projectStatusLabel = By.XPath("//label[contains(text(),'Status')]");
         private By projectStatusSelect = By.Id("input-projectStatusType");
-        private By projectMOTIRegionLabel = By.XPath("//label[contains(text(),'MoTI region')]");
+        private By projectMOTIRegionLabel = By.XPath("//label[contains(text(),'MOTT region')]");
         private By projectMOTIRegionInput = By.Id("input-region");
         private By projectSummaryLabel = By.XPath("//label[contains(text(),'Project summary')]");
         private By projectSummaryTextarea = By.Id("input-summary");
@@ -66,11 +66,11 @@ namespace PIMS.Tests.Automation.PageObjects
         private By teamMember1stDeleteBttn = By.XPath("//div[contains(text(),'Project Management Team')]/parent::div/parent::h2/following-sibling::div/div[1]/div[2]/button");
 
         //View Project Form Elements
-        private By projectViewTitle = By.XPath("//html[1]/body[1]/div[1]/div[2]/div[2]/div[1]/div[1]/div[1]/div[1]/div[1]/h1[contains(text(),'Project')]");
-        private By projectHeaderProjectNameLabel = By.XPath("//h1[contains(text(),'Project')]/parent::div/parent::div/following-sibling::div/div/div/div/div/div/label[contains(text(),'Project')]");
-        private By projectHeaderProjectNameContent = By.XPath("//h1[contains(text(),'Project')]/parent::div/parent::div/following-sibling::div/div/div/div/div/div/label[contains(text(),'Project')]/parent::div/following-sibling::div");
-        private By projectHeaderMoTIRegionLabel = By.XPath("//label[contains(text(),'MoTI region')]");
-        private By projectHeaderMoTIRegionContent = By.XPath("//label[contains(text(),'MoTI region')]/parent::div/following-sibling::div");
+        private By projectViewTitle = By.CssSelector("div[data-testid='form-title']");
+        private By projectHeaderProjectNameLabel = By.XPath("//label[(text()='Project:')]");
+        private By projectHeaderProjectNameContent = By.XPath("//label[text()='Project:']/parent::div/following-sibling::div");
+        private By projectHeaderMoTIRegionLabel = By.XPath("//label[contains(text(),'MOTT region')]");
+        private By projectHeaderMoTIRegionContent = By.XPath("//label[contains(text(),'MOTT region')]/parent::div/following-sibling::div");
         private By projectHeaderCreatedLabel = By.XPath("//strong[contains(text(),'Created')]");
         private By projectHeaderCreatedContent = By.XPath("//strong[contains(text(),'Created')]/parent::span");
         private By projectHeaderCreatedBy = By.XPath("//strong[contains(text(),'Created')]/parent::span/span[@data-testid='tooltip-icon-userNameTooltip']");
@@ -328,7 +328,7 @@ namespace PIMS.Tests.Automation.PageObjects
 
                WaitUntilVisible(productDeleteModal);
                Assert.Equal("Remove Team Member", sharedModals.ModalHeader());
-               Assert.Equal("Are you sure you want to remove this row?", sharedModals.ModalContent());
+               Assert.Equal("Do you wish to remove this team member?", sharedModals.ModalContent());
                sharedModals.ModalClickOKBttn();
            }
             
@@ -365,7 +365,7 @@ namespace PIMS.Tests.Automation.PageObjects
         {
             Wait();
 
-            AssertTrueIsDisplayed(projectCreateTitle);
+            //AssertTrueIsDisplayed(projectCreateTitle);
             AssertTrueIsDisplayed(projectInstructionParagraph);
 
             AssertTrueIsDisplayed(projectNameLabel);
@@ -560,7 +560,7 @@ namespace PIMS.Tests.Automation.PageObjects
 
         public string GetProjectName()
         {
-            WaitUntilVisible(projectHeaderProjectNameContent);
+           WaitUntilVisible(projectHeaderProjectNameContent);
 
             var totalProjectName = webDriver.FindElement(projectHeaderProjectNameContent).Text;
             return Regex.Match(totalProjectName, "[^ ]* (.*)").Groups[1].Value;

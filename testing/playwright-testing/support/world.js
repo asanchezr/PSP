@@ -45,13 +45,10 @@ class CustomWorld {
     this.sharedActivities = new SharedActivities(this.page);
     this.sharedFileProperties = new SharedFileProperties(this.page);
     this.sharedPagination = new SharedPagination(this.page);
-
-    this.page.setDefaultTimeout(20_000);
-    this.page.setDefaultNavigationTimeout(45_000);
   }
 
   async closeBrowser() {
-    //await this.browser?.close();
+    await this.browser?.close();
   }
 }
 

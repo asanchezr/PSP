@@ -1,3 +1,7 @@
+const {
+  clickSaveButton,
+  clickAndWaitFor,
+} = require("../../support/common.js");
 const { expect } = require("@playwright/test");
 
 class SharedFileProperties {
@@ -6,24 +10,32 @@ class SharedFileProperties {
   }
 
   async navigateToAddPropertiesToFile() {
-    await this.page.locator("button[title='Change properties']").click();
+    clickAndWaitFor(
+      this.page,
+     "button[title='Change properties']",
+      "a[data-rb-event-key='list']"
+    );
   }
 
   async navigateToSearchTab() {
-    await this.page.locator("a[data-rb-event-key='list']").click();
+    clickAndWaitFor(
+      this.page,
+     "a[data-rb-event-key='list']",
+      "input[id='input-pid']"
+    );
   }
 
   async selectPropertyByPID(pid) {
     await this.page.locator("#input-searchBy").selectOption({ label: "PID" });
     await this.page.locator("#input-pid").fill("");
-    await this.page.locator("#input-pid").fill(pid.toString());
+    await this.page.locator("#input-pid").fill(pid);
     await this.page.getByTestId("search").click();
   }
 
   async selectPropertyByPIN(pin) {
     await this.page.locator("#input-searchBy").selectOption({ label: "PIN" });
     await this.page.locator("#input-pin").fill("");
-    await this.page.locator("#input-pin").fill(pin.toString());
+    await this.page.locator("#input-pin").fill(pin);
     await this.page.getByTestId("search").click();
   }
 
@@ -60,46 +72,29 @@ class SharedFileProperties {
       .selectOption({ label: "Lat/Long" });
 
     await this.page
-      .locator("#number-input-coordinates.latitude.degrees")
-      .fill("");
+      .locator("#number-input-coordinates\\.latitude\\.degrees")
+      .fill(`${coordinates.LatitudeDegree}`);
     await this.page
-      .locator("#number-input-coordinates.latitude.minutes")
-      .fill("");
-    await this.page.locator("#coordinates.latitude.seconds").fill("");
+      .locator("#number-input-coordinates\\.latitude\\.minutes")
+      .fill(`${coordinates.LatitudeMinutes}`);
     await this.page
-      .locator("#number-input-coordinates.longitude.degrees")
-      .fill("");
+      .locator("#number-input-coordinates\\.latitude\\.seconds")
+      .fill(`${coordinates.LatitudeSeconds}`);
     await this.page
-      .locator("#number-input-coordinates.longitude.minutes")
-      .fill("");
-    await this.page
-      .locator("#number-input-coordinates.longitude.seconds")
-      .fill("");
-
-    await this.page
-      .locator("#number-input-coordinates.latitude.degrees")
-      .fill(coordinates.LatitudeDegree);
-    await this.page
-      .locator("#number-input-coordinates.latitude.minutes")
-      .fill(coordinates.LatitudeMinutes);
-    await this.page
-      .locator("#number-input-coordinates.latitude.seconds")
-      .fill(coordinates.LatitudeSeconds);
-    await this.page
-      .locator("#select-coordinates.latitude.direction")
+      .locator("#input-coordinates\\.latitude\\.direction")
       .selectOption({ label: coordinates.LatitudeDirection });
 
     await this.page
-      .locator("#number-input-coordinates.longitude.degrees")
-      .fill(coordinates.LongitudeDegree);
+      .locator("#number-input-coordinates\\.longitude\\.degrees")
+      .fill(`${coordinates.LongitudeDegree}`);
     await this.page
-      .locator("#number-input-coordinates.longitude.minutes")
-      .fill(coordinates.LongitudeMinutes);
+      .locator("#number-input-coordinates\\.longitude\\.minutes")
+      .fill(`${coordinates.LongitudeMinutes}`);
     await this.page
-      .locator("#number-input-coordinates.longitude.seconds")
-      .fill(coordinates.LongitudeSeconds);
+      .locator("#number-input-coordinates\\.longitude\\.seconds")
+      .fill(`${coordinates.LongitudeSeconds}`);
     await this.page
-      .locator("#select-coordinates.longitude.direction")
+      .locator("#input-coordinates\\.longitude\\.direction")
       .selectOption({ label: coordinates.LongitudeDirection });
 
     await this.page.getByTestId("search").click();
@@ -112,14 +107,16 @@ class SharedFileProperties {
   }
 
   async selectFirstOptionFromSearch() {
-    await this.page
+    const firstResultChoice = await this.page
       .locator(
-        "div[data-testid='map-properties'] div[class='tbody'] div[class='tr-wrapper']"
-      )
-      .first()
-      .check();
+        "div[data-testid='map-properties'] div[class='tbody'] div[class='tr-wrapper']:first-child div input"
+      );
+    await firstResultChoice.waitFor({state: 'visible'});
+    await firstResultChoice.check();
 
-    await this.page.getByTestId("add-selected-properties-button").click();
+    const addPropertyBttn = await this.page.getByTestId("add-selected-properties-button");
+    await addPropertyBttn.waitFor({state: 'visible'});
+    await addPropertyBttn.click();
 
     while (
       (await this.page.locator("div[class='modal-content']").count()) > 0
@@ -154,7 +151,7 @@ class SharedFileProperties {
             "This property has already been added to one or more research files."
           )
       ) {
-        await expect(
+        expect(
           this.page.locator(
             "div[class='modal-header'] div[class='modal-title h4']"
           )
@@ -176,7 +173,7 @@ class SharedFileProperties {
             "This property has already been added to one or more disposition files."
           )
       ) {
-        await expect(
+        expect(
           this.page.locator(
             "div[class='modal-header'] div[class='modal-title h4']"
           )
@@ -198,7 +195,7 @@ class SharedFileProperties {
             "This property has already been added to one or more files."
           )
       ) {
-        await expect(
+        expect(
           this.page.locator(
             "div[class='modal-header'] div[class='modal-title h4']"
           )
@@ -219,7 +216,7 @@ class SharedFileProperties {
             "You have selected a property not previously in the inventory."
           )
       ) {
-        await expect(
+        expect(
           this.page.locator(
             "div[class='modal-header'] div[class='modal-title h4']"
           )
@@ -283,20 +280,30 @@ class SharedFileProperties {
   }
 
   async verifySearchTabPropertiesFeature() {
-    expect(this.page.locator("a[data-rb-event-key='list']")).toBeVisible();
 
-    // const propertySubtitle = await this.page.locator(
-    //     "div[data-testid='property-search-selector-section'] h2 div div"
-    //   ).textContent();
-    // expect(propertySubtitle).toEqual("Search for a property");
+    const searchPropsTab = await this.page.locator("//a[contains(text(),'Search')]");
+    expect(searchPropsTab).toBeVisible();
 
-    await expect(this.page.locator("#input-searchBy")).toBeVisible();
-    await expect(this.page.locator("#input-pid")).toBeVisible();
-    await expect(this.page.locator("#search-button")).toBeVisible();
-    await expect(this.page.locator("#reset-button")).toBeVisible();
-    await expect(
-      this.page.locator("div[class='thead thead-light']")
-    ).toBeVisible();
+    const propertySubtitle = await this.page.locator(
+        "div[data-testid='property-search-selector-section'] h2 div div"
+      ).textContent();
+    expect(propertySubtitle).toEqual("Search for a property");
+
+    const searchBySelect = await this.page.locator("#input-searchBy");
+    expect(searchBySelect).toBeVisible();
+
+    const pidInput = await this.page.locator("#input-pid");
+    expect(pidInput).toBeVisible();
+
+    const searchButton = await this.page.locator("#search-button");
+    expect(searchButton).toBeVisible();
+
+    const resetButton = await this.page.locator("#reset-button");
+    expect(resetButton).toBeVisible();
+
+    const tableHeader = await this.page.locator("div[class='thead thead-light']");
+    expect(tableHeader).toBeVisible();
+
     await expect(
       this.page.locator("input[data-testid='selectrow-parent']")
     ).toBeVisible();
@@ -349,10 +356,12 @@ class SharedFileProperties {
     const propertiesAfterRemove = await this.page
       .locator("div[class='align-items-center mb-3 no-gutters row']")
       .count();
-    await expect(propertiesAfterRemove).toBe(propertyIndex - 1);
+    expect(propertiesAfterRemove).toBe(propertyIndex - 1);
   }
 
   async saveFileProperties() {
+    clickSaveButton(this.page, "button[title='Edit management file']");
+
     const headerContent = await this.page
       .locator("div[class='modal-header'] div[class='modal-title h4']")
       .textContent();
@@ -372,67 +381,37 @@ class SharedFileProperties {
 
     await this.page.getByTestId("ok-modal-button").click();
 
-    while (
-      (await this.page.locator("div[class='modal-content']").count()) > 0
-    ) {
-      if (
-        await this.page
-          .locator("div[class='modal-body']")
-          .last()
-          .textContent()
-          .includes(
-            "You have added one or more properties to the disposition file that are not in the MOTI Inventory"
-          )
-      ) {
-        await expect(
-          locator(
-            "div[class='modal-header'] div[class='modal-title h4']"
-          ).last()
-        ).toHabeTextContent("User Override Required");
-        await expect(
-          locator("div[class='modal-body']").last().textContent()
-        ).toHabeTextContent(
+    while (await this.page.locator("div.modal-content").isVisible().catch(() => false)) {
+      const modalHeader = this.page.locator("div.modal-header .modal-title.h4").last();
+      const modalBody = this.page.locator("div.modal-body").last();
+
+      const modalText = await modalBody.textContent() ?? "";
+
+      if (modalText.includes("You have added one or more properties to the disposition file")) {
+        await expect(modalHeader).toContainText("User Override Required");
+        await expect(modalBody).toContainText(
           "You have added one or more properties to the disposition file that are not in the MOTI Inventory. Do you want to proceed?"
         );
-      } else if (
-        await this.page
-          .locator("div[class='modal-body']")
-          .last()
-          .textContent()
-          .includes(
-            "You have added one or more properties to the management file that are not in the MOTI Inventory"
-          )
-      ) {
-        await expect(
-          locator(
-            "div[class='modal-header'] div[class='modal-title h4']"
-          ).last()
-        ).toHabeTextContent("User Override Required");
-        await expect(
-          locator("div[class='modal-body']").last().textContent()
-        ).toHabeTextContent(
+        await this.sharedModal.mainModalClickOKBttn();
+      } else if (modalText.includes("You have added one or more properties to the management file")) {
+        await expect(modalHeader).toContainText("User Override Required");
+        await expect(modalBody).toContainText(
           "You have added one or more properties to the management file that are not in the MOTI Inventory. To acquire these properties, add them to an acquisition file. Do you want to proceed?"
         );
+        await this.sharedModal.mainModalClickOKBttn();
       } else {
-        await expect(
-          this.page
-            .locator("div[class='modal-header'] div[class='modal-title h4']")
-            .last()
-        ).toBe("User Override Required");
-        await expect(
-          this.page.locator("div[class='modal-body']").last()
-        ).toHaveTextContent(
+        await expect(modalHeader).toContainText("User Override Required");
+        await expect(modalBody).toContainText(
           "The selected property already exists in the system's inventory. However, the record is missing spatial details."
         );
-        await expect(
-          this.page.locator("div[class='modal-body']").last()
-        ).toHaveTextContent(
+        await expect(modalBody).toContainText(
           "To add the property, the spatial details for this property will need to be updated. The system will attempt to update the property record with spatial information from the current selection."
         );
+        await this.sharedModal.mainModalClickOKBttn();
       }
-
-      await this.page.getByTestId("ok-modal-button").click();
     }
+
+    await this.page.waitForTimeout(1000);
   }
 }
 

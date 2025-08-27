@@ -6,8 +6,8 @@ const {
 } = require("../../support/common.js");
 const { expect } = require("@playwright/test");
 
-let managementFile;
-let managementFileCode;
+let managementFile = {};
+let managementFileCode = '';
 
 Given(
   "I create a new Management File with row number {int}",
@@ -59,8 +59,8 @@ When(
 
     //Verify automatic note created when status changes
     if (managementFile.ManagementStatus != "Active") {
-      this.notes.navigateNotesTab();
-      this.notes.verifyAutomaticNotes(
+      await this.notes.navigateNotesTab();
+      await this.notes.verifyAutomaticNotes(
         "Management File",
         "Active",
         managementFile.ManagementStatus
@@ -98,7 +98,7 @@ When(
     );
 
     //Save Management File
-    this.managementFileDetails.saveManagementFile();
+    await this.managementFileDetails.saveManagementFile();
 
     //Get Mangement File code
     managementFileCode =
@@ -111,8 +111,8 @@ When(
 
     //Verify automatic note created when
     if (managementFile.ManagementStatus != "Active") {
-      this.notes.navigateNotesTab();
-      this.notes.verifyAutomaticNotes(
+      await this.notes.navigateNotesTab();
+      await this.notes.verifyAutomaticNotes(
         "Management File",
         "Hold",
         managementFile.ManagementStatus
@@ -123,75 +123,75 @@ When(
 
 When("I add Properties to the Management File", async function () {
   //Navigate to Properties for Management File
-  this.sharedFileProperties.navigateToAddPropertiesToFile();
+  await this.sharedFileProperties.navigateToAddPropertiesToFile();
 
   //Navigate to Add Properties by search and verify Add Properties UI/UX
-  this.sharedFileProperties.navigateToSearchTab();
-  this.sharedFileProperties.verifySearchTabPropertiesFeature();
+  await this.sharedFileProperties.navigateToSearchTab();
+  await this.sharedFileProperties.verifySearchTabPropertiesFeature();
 
   //Search for a property by PID
-  if (managementFile.ManagementSearchProperties.PID != null) {
-    this.sharedFileProperties.selectPropertyByPID(
+  if (managementFile.ManagementSearchProperties.PID) {
+    await this.sharedFileProperties.selectPropertyByPID(
       managementFile.ManagementSearchProperties.PID
     );
-    this.sharedFileProperties.selectFirstOptionFromSearch();
-    this.sharedFileProperties.resetSearch();
+    await this.sharedFileProperties.selectFirstOptionFromSearch();
+    await this.sharedFileProperties.resetSearch();
   }
 
   //Search for a property by PIN
-  if (managementFile.ManagementSearchProperties.PIN != null) {
-    this.sharedFileProperties.selectPropertyByPIN(
+  if (managementFile.ManagementSearchProperties.PIN) {
+    await this.sharedFileProperties.selectPropertyByPIN(
       managementFile.ManagementSearchProperties.PIN
     );
-    this.sharedFileProperties.selectFirstOptionFromSearch();
-    this.sharedFileProperties.resetSearch();
+    await this.sharedFileProperties.selectFirstOptionFromSearch();
+    await this.sharedFileProperties.resetSearch();
   }
 
   //Search for a property by Plan
-  if (managementFile.ManagementSearchProperties.PlanNumber != null) {
-    this.sharedFileProperties.selectPropertyByPlan(
+  if (managementFile.ManagementSearchProperties.PlanNumber) {
+    await this.sharedFileProperties.selectPropertyByPlan(
       managementFile.ManagementSearchProperties.PlanNumber
     );
-    this.sharedFileProperties.selectFirstOptionFromSearch();
-    this.sharedFileProperties.resetSearch();
+    await this.sharedFileProperties.selectFirstOptionFromSearch();
+    await this.sharedFileProperties.resetSearch();
   }
 
   //Search for a property by Address
-  if (managementFile.ManagementSearchProperties.Address != null) {
-    this.sharedFileProperties.selectPropertyByAddress(
+  if (managementFile.ManagementSearchProperties.Address) {
+    await this.sharedFileProperties.selectPropertyByAddress(
       managementFile.ManagementSearchProperties.Address
     );
-    this.sharedFileProperties.selectFirstOptionFromSearch();
-    this.sharedFileProperties.resetSearch();
+    await this.sharedFileProperties.selectFirstOptionFromSearch();
+    await this.sharedFileProperties.resetSearch();
   }
 
   //Search for a property by Legal Description
-  if (managementFile.ManagementSearchProperties.LegalDescription != null) {
-    this.sharedFileProperties.selectPropertyByLegalDescription(
+  if (managementFile.ManagementSearchProperties.LegalDescription) {
+    await this.sharedFileProperties.selectPropertyByLegalDescription(
       managementFile.ManagementSearchProperties.LegalDescription
     );
-    this.sharedFileProperties.selectFirstOptionFromSearch();
-    this.sharedFileProperties.resetSearch();
+    await this.sharedFileProperties.selectFirstOptionFromSearch();
+    await this.sharedFileProperties.resetSearch();
   }
 
   //Search for a property by Latitude and Longitude
   if (
     managementFile.ManagementSearchProperties.LatitudeLongitude
-      .LatitudeDegree != ""
+      .LatitudeDegree
   ) {
-    this.sharedFileProperties.selectPropertyByLongLant(
+    await this.sharedFileProperties.selectPropertyByLongLant(
       managementFile.ManagementSearchProperties.LatitudeLongitude
     );
-    this.sharedFileProperties.selectFirstOptionFromSearch();
-    this.sharedFileProperties.resetSearch();
+    await this.sharedFileProperties.selectFirstOptionFromSearch();
+    await this.sharedFileProperties.resetSearch();
   }
 
   //Search for Multiple PIDs
-  if (managementFile.ManagementSearchProperties.MultiplePIDS != null) {
-    const givenPIDs = splitStringToArray(
+  if (managementFile.ManagementSearchProperties.MultiplePIDS) {
+    const givenPIDs = await splitStringToArray(
       managementFile.ManagementSearchProperties.MultiplePIDS
     );
-    givenPIDs.forEach((pid) => {
+    await givenPIDs.forEach((pid) => {
       this.sharedFileProperties.selectPropertyByPID(pid);
       this.sharedFileProperties.selectFirstOptionFromSearch();
       this.sharedFileProperties.resetSearch();
@@ -199,16 +199,16 @@ When("I add Properties to the Management File", async function () {
   }
 
   //Search for a duplicate property
-  if (managementFile.ManagementSearchProperties.PID != null) {
-    this.sharedFileProperties.selectPropertyByPID(
+  if (managementFile.ManagementSearchProperties.PID) {
+    await this.sharedFileProperties.selectPropertyByPID(
       managementFile.ManagementSearchProperties.PID
     );
-    this.sharedFileProperties.selectFirstOptionFromSearch();
-    this.sharedFileProperties.resetSearch();
+    await this.sharedFileProperties.selectFirstOptionFromSearch();
+    await this.sharedFileProperties.resetSearch();
   }
 
   //Save Management File
-  this.sharedFileProperties.saveFileProperties();
+  await this.sharedFileProperties.saveFileProperties();
 });
 
 When(
@@ -217,32 +217,32 @@ When(
     managementFile = mgmFiles[rowNbr];
 
     //Search for an existing Management File
-    this.searchManagementFiles.navigateToSearchManagement();
-    //this.searchManagementFiles.filterManagementFiles(mgmtfile: managementFileCode);
-    this.searchManagementFiles.selectFirstOption();
+    await this.searchManagementFiles.navigateToSearchManagement();
+    await this.searchManagementFiles.filterManagementFiles({mgmtfile: managementFileCode});
+    await this.searchManagementFiles.selectFirstOption();
 
     //Navigate to Edit Management File's Properties
-    this.sharedFileProperties.navigateToAddPropertiesToFile();
+    await this.sharedFileProperties.navigateToAddPropertiesToFile();
 
     //Search for a property by Legal Description
-    this.sharedFileProperties.navigateToSearchTab();
-    this.sharedFileProperties.selectPropertyByLegalDescription(
+    await this.sharedFileProperties.navigateToSearchTab();
+    await this.sharedFileProperties.selectPropertyByLegalDescription(
       managementFile.ManagementSearchProperties.LegalDescription
     );
-    this.sharedFileProperties.selectFirstOptionFromSearch();
+    await this.sharedFileProperties.selectFirstOptionFromSearch();
 
     //Save changes
-    this.sharedFileProperties.saveFileProperties();
+    await this.sharedFileProperties.saveFileProperties();
 
     //Delete Property
-    this.sharedFileProperties.navigateToAddPropertiesToFile();
-    this.sharedFileProperties.deleteLastPropertyFromFile();
+    await this.sharedFileProperties.navigateToAddPropertiesToFile();
+    await this.sharedFileProperties.deleteLastPropertyFromFile();
 
     //Save Acquisition File changes
-    this.sharedFileProperties.saveFileProperties();
+    await this.sharedFileProperties.saveFileProperties();
 
     //Select 1st Property
-    this.sharedFileProperties.selectFirstPropertyOptionFromFile();
+    await this.sharedFileProperties.selectFirstPropertyOptionFromFile();
   }
 );
 
@@ -255,13 +255,13 @@ When(
 
     //Verify Pagination
     await this.sharedPagination.choosePaginationOption(5);
-    await expect(this.searchManagementFiles.mgmtTableResultNumber()).toBe(5);
+    expect(this.searchManagementFiles.mgmtTableResultNumber()).toBe(5);
 
     await this.sharedPagination.choosePaginationOption(10);
-    await expect(this.searchManagementFiles.mgmtTableResultNumber()).toBe(10);
+    expect(this.searchManagementFiles.mgmtTableResultNumber()).toBe(10);
 
     await this.sharedPagination.choosePaginationOption(20);
-    await expect(
+    expect(
       this.searchManagementFiles.mgmtTableResultNumber()
     ).toBeLessThan(20);
 
@@ -280,7 +280,7 @@ When(
     const firstFileNameAscResult =
       await this.searchManagementFiles.firstMgmtFileName();
 
-    await expect(firstFileNameDescResult).not.toEqual(firstFileNameAscResult);
+    expect(firstFileNameDescResult).not.toEqual(firstFileNameAscResult);
 
     //Verify Column Sorting by Historical File Number
     this.searchManagementFiles.orderByMgmtHistoricalFileNbr();
@@ -291,7 +291,7 @@ When(
     const firstHistoricalAscResult =
       await this.searchManagementFiles.firstMgmtHistoricalFile();
 
-    await expect(firstHistoricalDescResult).not.toEqual(
+    expect(firstHistoricalDescResult).not.toEqual(
       firstHistoricalAscResult
     );
 
@@ -336,12 +336,12 @@ When(
     await this.sharedPagination.resetSearch();
 
     //Filter Acquisition Files
-    //await this.searchManagementFiles.filterManagementFiles(pid: "003-549-551", mgmtfile: "Management from Jonathan Doe", status: "Cancelled");
-    await expect(this.searchManagementFiles.searchFoundResults()).not
+    await this.searchManagementFiles.filterManagementFiles({pid: "003-549-551", mgmtfile: "Management from Jonathan Doe", status: "Cancelled"});
+    expect(this.searchManagementFiles.searchFoundResults()).not
       .toBeTruthy;
 
     //Look for the last created Acquisition File
-    //await this.searchManagementFiles.filterManagementFiles(mgmtfile: managementFile.ManagementName, status: managementFile.ManagementStatus);
+    await this.searchManagementFiles.filterManagementFiles({mgmtfile: managementFile.ManagementName, status: managementFile.ManagementStatus});
   }
 );
 
@@ -359,7 +359,6 @@ When("I insert activities to the Management Activities Tab", async function () {
         activity.PropertyActivityPropsCount
       );
       await this.sharedActivities.insertNewPropertyActivity(activity);
-      clickSaveButton();
       await this.sharedActivities.saveActivity();
       await this.sharedActivities.verifyInsertedActivity(
         activity,

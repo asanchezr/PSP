@@ -35,7 +35,7 @@ namespace PIMS.Tests.Automation.PageObjects
         private By searchDispositionOrderFileNameBttn = By.CssSelector("div[data-testid='sort-column-fileName']");
         private By searchDispositionFileTypeHeader = By.XPath("//div[@role='table']/div[@class='thead thead-light']/div/div/div[contains(text(),'Disposition type')]");
         private By searchDispositionFileOrderTypeBttn = By.CssSelector("div[data-testid='sort-column-dispositionTypeCode']");
-        private By searchDispositionMOTIRegionHeader = By.XPath("//div[@role='table']/div[@class='thead thead-light']/div/div/div[contains(text(),'MOTI Region')]");
+        private By searchDispositionMOTIRegionHeader = By.XPath("//div[@role='table']/div[@class='thead thead-light']/div/div/div[contains(text(),'MOTT region')]");
         private By searchDispositionTeamMemberHeader = By.XPath("//div[@role='table']/div[@class='thead thead-light']/div/div/div[contains(text(),'Team member')]");
         private By searchDispositionAddressHeader = By.XPath("//div[@role='table']/div[@class='thead thead-light']/div/div/div[contains(text(),'Civic Address / PID / PIN')]");
         private By searchDispositionDispositionStatusHeader = By.XPath("//div[@role='table']/div[@class='thead thead-light']/div/div/div[contains(text(),'Disposition status')]");
@@ -192,7 +192,7 @@ namespace PIMS.Tests.Automation.PageObjects
             {
                 webDriver.FindElement(searchDispositionFileTeamMemberSelect).SendKeys(teamMember);
                 WaitUntilVisible(searchDispositionTeamMemberOptions);
-                webDriver.FindElement(searchDispositionTeamMember1stOption).Click();
+                FocusAndClick(searchDispositionTeamMember1stOption);
             }
 
             if(status != "")

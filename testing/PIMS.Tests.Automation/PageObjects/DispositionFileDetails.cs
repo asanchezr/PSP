@@ -17,10 +17,10 @@ namespace PIMS.Tests.Automation.PageObjects
         private By dispositionFileEditButton = By.CssSelector("button[title='Edit disposition file']");
 
         //Disposition File Details View and Create Forms Elements
-        private By dispositionFileViewTitle = By.XPath("//html[1]/body[1]/div[1]/div[2]/div[2]/div[1]/div[1]/div[1]/div[1]/div[1]/h1[contains(text(),'Disposition File')]");
+        private By dispositionFileViewTitle = By.XPath("//div[@data-testid='form-title']");
         private By dispositionFileMainFormDiv = By.XPath("//h1[contains(text(),'Create Disposition File')]/parent::div/parent::div/parent::div/parent::div");
 
-        private By dispositionFileCreateTitle = By.XPath("//*[contains(text(),'Create Disposition File')]");
+        private By dispositionFileCreateTitle = By.XPath("//div[@data-testid='form-title']");
         private By dispositionFileCloseFormBttn = By.XPath("//h1[contains(text(),'Disposition File')]/parent::div/following-sibling::div/*[3]");
 
         private By dispositionFileHeaderCodeLabel = By.XPath("//label[contains(text(), 'File:')]");
@@ -36,8 +36,8 @@ namespace PIMS.Tests.Automation.PageObjects
         private By dispositionFileHeaderStatusContent = By.XPath("//b[contains(text(),'File')]/parent::span/following-sibling::div");
 
         private By dispositionFileStatusSelect = By.Id("input-fileStatusTypeCode");
-        private By dispositionFileProjectSubtitle = By.XPath("//h2/div/div[contains(text(), 'Project')]");
-        private By dispositionFileProjectLabel = By.XPath("//div[@class='collapse show']/div/div/label[contains(text(),'Ministry project')]");
+        private By dispositionFileProjectSubtitle = By.XPath("(//div[contains(text(),'Project')])[1]");
+        private By dispositionFileProjectLabel = By.XPath("//label[normalize-space()='Ministry project:']");
         private By dispositionFileProjectInput = By.CssSelector("input[id='typeahead-project']");
         private By dispositionFileProject1stOption = By.CssSelector("div[id='typeahead-project'] a");
         private By dispositionFileProjectContent = By.XPath("//div[@class='collapse show']/div/div/label[contains(text(),'Ministry project')]/parent::div/following-sibling::div");
@@ -447,18 +447,18 @@ namespace PIMS.Tests.Automation.PageObjects
             return webDriver.FindElements(dispositionFileMainFormDiv).Count();
         }
 
-        //public string GetDispositionFileName()
-        //{
-        //    //WaitUntilVisible(dispositionFileHeaderCodeContent);
+        public string GetDispositionFileName()
+        {
+            WaitUntilVisible(dispositionFileHeaderCodeContent);
 
-        //    //var totalFileName = webDriver.FindElement(dispositionFileHeaderCodeContent).Text;
-        //    //return Regex.Match(totalFileName, "^[^ ]+").Value;
+            var totalFileName = webDriver.FindElement(dispositionFileHeaderCodeContent).Text;
+            return Regex.Match(totalFileName, "^[^ ]+").Value;
 
-        //}
+        }
 
         public void VerifyDispositionFileInitCreate()
         {
-            //AssertTrueIsDisplayed(dispositionFileCreateTitle);
+            AssertTrueIsDisplayed(dispositionFileCreateTitle);
 
             //Project
             AssertTrueIsDisplayed(dispositionFileProjectSubtitle);

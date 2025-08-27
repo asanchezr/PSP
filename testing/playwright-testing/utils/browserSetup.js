@@ -11,6 +11,7 @@ if (fs.existsSync(USER_DATA_DIR)) {
 async function launchBrowser() {
   const context = await chromium.launchPersistentContext(USER_DATA_DIR, {
     headless: false,
+    slowMo: 1000,
     args: [
       "--no-first-run",
       "--no-default-browser-check",

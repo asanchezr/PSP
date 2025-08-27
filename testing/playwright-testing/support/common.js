@@ -4,8 +4,12 @@ function getUserCredential(envKey) {
   return process.env[envKey];
 }
 
-function clickSaveButton(page) {
-  page.getByTestId("save-button").click();
+function clickSaveButton(page, waitElement) {
+  clickAndWaitFor(
+      page,
+      "button[data-testid='save-button']",
+      waitElement
+    );
 }
 
 async function cancelAction(page) {
@@ -93,10 +97,11 @@ async function clickAndWaitFor(
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      await page.click(clickSelector, { force: true });
+      await page.click(clickSelector, { force: false });
 
       // Wait for the target element to appear
       await page.waitForSelector(waitSelector, { timeout });
+      console.log("Success");
       return; // Success — exit function
     } catch (err) {
       lastError = err;

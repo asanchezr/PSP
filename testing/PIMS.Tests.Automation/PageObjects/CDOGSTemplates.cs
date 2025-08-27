@@ -22,7 +22,7 @@ namespace PIMS.Tests.Automation.PageObjects
         //Documents List Results
         private By CDOGSTableResults = By.CssSelector("div[data-testid='documentsTable']");
         private By CDOGSTableTypeColumn = By.XPath("//div[contains(text(),'Document type')]");
-        private By CDOGSTableNameColumn = By.XPath("//div[contains(text(),'File name')]");
+        private By CDOGSTableNameColumn = By.XPath("//div[contains(text(),'Document name')]");
         private By CDOGSTableDateColumn = By.XPath("//div[contains(text(),'Uploaded')]");
         private By CDOGSTableStatusColumn = By.XPath("//div[contains(text(),'Status')]");
         private By CDOGSTableActionsColumn = By.XPath("//div[contains(text(),'Actions')]");
