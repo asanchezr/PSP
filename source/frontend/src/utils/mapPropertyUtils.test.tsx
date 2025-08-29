@@ -1,14 +1,10 @@
 import { polygon } from '@turf/turf';
-import { Feature, FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
+import { Feature, Geometry } from 'geojson';
 import { LatLngLiteral } from 'leaflet';
 
+import { LocationBoundaryDataset } from '@/components/common/mapFSM/models';
 import { SelectedFeatureDataset } from '@/components/common/mapFSM/useLocationFeatureLoader';
 import { IMapProperty } from '@/components/propertySelector/models';
-import { AreaUnitTypes } from '@/constants';
-import {
-  mockFAParcelLayerResponse,
-  mockFAParcelLayerResponseMultiPolygon,
-} from '@/mocks/faParcelLayerResponse.mock';
 import { getMockSelectedFeatureDataset } from '@/mocks/featureset.mock';
 import { getEmptyFileProperty } from '@/mocks/fileProperty.mock';
 import { getMockLatLng, getMockLocation, getMockPolygon } from '@/mocks/geometries.mock';
@@ -18,10 +14,8 @@ import { getEmptyProperty } from '@/models/defaultInitializers';
 import { PMBC_FullyAttributed_Feature_Properties } from '@/models/layers/parcelMapBC';
 import { PIMS_Property_Location_View } from '@/models/layers/pimsPropertyLocationView';
 
-import { LocationBoundaryDataset } from '@/components/common/mapFSM/models';
 import {
   featuresetToMapProperty,
-  featuresToIdentifiedMapProperty,
   filePropertyToLocationBoundaryDataset,
   getFilePropertyName,
   getLatLng,
@@ -172,76 +166,6 @@ describe('mapPropertyUtils', () => {
       const fileName = getFilePropertyName(mapProperty, skipName);
       expect(fileName.label).toEqual(expectedName.label);
       expect(fileName.value).toEqual(expectedName.value);
-    },
-  );
-
-  it.each([
-    [{ type: 'FeatureCollection', features: [] } as FeatureCollection, undefined, []],
-    [
-      mockFAParcelLayerResponse,
-      undefined,
-      [
-        {
-          address: undefined,
-          areaUnit: AreaUnitTypes.SquareMeters,
-          district: undefined,
-          districtName: undefined,
-          landArea: 29217,
-          latitude: 48.76613749999999,
-          legalDescription:
-            'THAT PART OF SECTION 13, RANGE 1, SOUTH SALT SPRING ISLAND, COWICHAN DISTRICT',
-          longitude: -123.46163749999998,
-          name: undefined,
-          pid: '9727493',
-          pin: undefined,
-          planNumber: 'NO_PLAN',
-          propertyId: undefined,
-          region: undefined,
-          regionName: undefined,
-          fileLocation: {
-            lat: 48.76613749999999,
-            lng: -123.46163749999998,
-          },
-        },
-      ],
-    ],
-    [
-      mockFAParcelLayerResponseMultiPolygon,
-      undefined,
-      [
-        {
-          address: undefined,
-          areaUnit: AreaUnitTypes.SquareMeters,
-          district: undefined,
-          districtName: undefined,
-          landArea: 29217,
-          latitude: 48.76613749999999,
-          legalDescription:
-            'THAT PART OF SECTION 13, RANGE 1, SOUTH SALT SPRING ISLAND, COWICHAN DISTRICT',
-          longitude: -123.46163749999998,
-          name: undefined,
-          pid: '9727493',
-          pin: undefined,
-          planNumber: 'NO_PLAN',
-          propertyId: undefined,
-          region: undefined,
-          regionName: undefined,
-          fileLocation: {
-            lat: 48.76613749999999,
-            lng: -123.46163749999998,
-          },
-        },
-      ],
-    ],
-  ])(
-    'featuresToIdentifiedMapProperty test with feature values %o and address %o and expected map properties %o',
-    (
-      values: FeatureCollection<Geometry, GeoJsonProperties> | undefined,
-      address?: string,
-      expected?: IMapProperty[],
-    ) => {
-      const mapProperties = featuresToIdentifiedMapProperty(values, address);
-      expect(mapProperties).toEqual(expected);
     },
   );
 

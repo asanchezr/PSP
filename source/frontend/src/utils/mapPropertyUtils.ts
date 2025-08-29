@@ -165,21 +165,6 @@ export const mapFeatureToProperty = (
   return toMapProperty(selectedFeature, 'unknown', latitude, longitude);
 };
 
-export const featuresToIdentifiedMapProperty = (
-  values: FeatureCollection<Geometry, GeoJsonProperties> | undefined,
-  address?: string,
-) =>
-  values?.features
-    ?.filter(
-      feature =>
-        feature?.geometry?.type === ApiGen_CodeTypes_GeoJsonTypes.Polygon ||
-        feature?.geometry?.type === ApiGen_CodeTypes_GeoJsonTypes.MultiPolygon,
-    )
-    .map((feature): IMapProperty => {
-      const boundedCenter = getFeatureBoundedCenter(feature);
-      return toMapProperty(feature, address, boundedCenter[1], boundedCenter[0]);
-    });
-
 export const getFeatureBoundedCenter = (feature: Feature<Geometry, GeoJsonProperties>) => {
   if (feature?.geometry?.type === ApiGen_CodeTypes_GeoJsonTypes.Polygon) {
     const boundedCenter = polylabel(
