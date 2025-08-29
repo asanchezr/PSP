@@ -76,6 +76,7 @@ export const getPropertyNameFromSelectedFeatureSet = (
   const pid = pidFromFeatureSet(selectedFeature);
   const pin = pinFromFeatureSet(selectedFeature);
   const planNumber = planFromFeatureSet(selectedFeature);
+  const address = addressFromFeatureSet(selectedFeature);
 
   const location = selectedFeature.location;
   if (exists(pid) && pid?.toString()?.length > 0 && pid !== '0') {
@@ -89,7 +90,10 @@ export const getPropertyNameFromSelectedFeatureSet = (
       label: NameSourceType.LOCATION,
       value: compact([location.lng?.toFixed(6), location.lat?.toFixed(6)]).join(', '),
     };
+  } else if (exists(address) && address?.length > 0) {
+    return { label: NameSourceType.ADDRESS, value: address ?? '' };
   }
+
   return { label: NameSourceType.NONE, value: '' };
 };
 
@@ -346,6 +350,16 @@ export function planFromFeatureSet(featureset: SelectedFeatureDataset): string |
   }
 
   return planFromFullyAttributedFeature(featureset.parcelFeature);
+}
+
+export function addressFromFeatureSet(featureset: SelectedFeatureDataset): string | null {
+  if (exists(featureset.pimsFeature?.properties)) {
+    return exists(featureset.pimsFeature?.properties?.STREET_ADDRESS_1)
+      ? formatApiAddress(AddressForm.fromPimsView(featureset.pimsFeature?.properties).toApi())
+      : null;
+  }
+
+  return null;
 }
 
 export function locationFromFileProperty(
