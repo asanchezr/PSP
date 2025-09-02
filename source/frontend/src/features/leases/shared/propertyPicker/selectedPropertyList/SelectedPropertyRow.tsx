@@ -15,7 +15,7 @@ import DraftCircleNumber from '@/components/propertySelector/selectedPropertyLis
 import { FormLeaseProperty, LeaseFormModel } from '@/features/leases/models';
 import { exists } from '@/utils';
 import { withNameSpace } from '@/utils/formUtils';
-import { featuresetToMapProperty, getPropertyName, NameSourceType } from '@/utils/mapPropertyUtils';
+import { getPropertyNameFromSelectedFeatureSet, NameSourceType } from '@/utils/mapPropertyUtils';
 
 export interface ISelectedPropertyRowProps {
   index: number;
@@ -35,7 +35,7 @@ export const SelectedPropertyRow: React.FunctionComponent<ISelectedPropertyRowPr
   showSeparator = false,
 }) => {
   const mapMachine = useMapStateMachine();
-  const propertyName = getPropertyName(featuresetToMapProperty(property));
+  const propertyName = getPropertyNameFromSelectedFeatureSet(property);
   let propertyIdentifier = '';
   switch (propertyName.label) {
     case NameSourceType.PID:

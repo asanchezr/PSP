@@ -45,27 +45,6 @@ export interface PropertyName {
   value: string;
 }
 
-export const getPropertyName = (property: IMapProperty): PropertyName => {
-  if (!!property?.pid && property?.pid?.toString().length > 0 && property?.pid !== '0') {
-    return { label: NameSourceType.PID, value: pidFormatter(property?.pid.toString()) };
-  } else if (!!property?.pin && property?.pin?.toString()?.length > 0 && property?.pin !== '0') {
-    return { label: NameSourceType.PIN, value: property.pin.toString() };
-  } else if (!!property?.planNumber && property?.planNumber?.length > 0) {
-    return { label: NameSourceType.PLAN, value: property.planNumber };
-  } else if (!!property?.latitude && !!property?.longitude) {
-    return {
-      label: NameSourceType.LOCATION,
-      value: compact([property.longitude?.toFixed(6), property.latitude?.toFixed(6)]).join(', '),
-    };
-  } else if (property?.address) {
-    return {
-      label: NameSourceType.ADDRESS,
-      value: property.address,
-    };
-  }
-  return { label: NameSourceType.NONE, value: '' };
-};
-
 export const getPropertyNameFromSelectedFeatureSet = (
   selectedFeature: SelectedFeatureDataset | null,
 ): PropertyName => {
@@ -77,8 +56,8 @@ export const getPropertyNameFromSelectedFeatureSet = (
   const pin = pinFromFeatureSet(selectedFeature);
   const planNumber = planFromFeatureSet(selectedFeature);
   const address = addressFromFeatureSet(selectedFeature);
-
   const location = selectedFeature.location;
+
   if (exists(pid) && pid?.toString()?.length > 0 && pid !== '0') {
     return { label: NameSourceType.PID, value: pidFormatter(pid.toString()) };
   } else if (exists(pin) && pin?.toString()?.length > 0 && pin !== '0') {
@@ -147,15 +126,29 @@ export const getApiPropertyName = (
     return { label: NameSourceType.NONE, value: '' };
   }
 
-  const mapProperty: IMapProperty = {
-    pin: property.pin?.toString(),
-    pid: property.pid?.toString(),
-    latitude: property.latitude ?? undefined,
-    longitude: property.longitude ?? undefined,
-    planNumber: property.planNumber ?? undefined,
-    address: exists(property.address) ? formatApiAddress(property.address) : undefined,
-  };
-  return getPropertyName(mapProperty);
+  const pid = property.pid?.toString();
+  const pin = property.pin?.toString();
+  const planNumber = property.planNumber;
+  const address = exists(property.address) ? formatApiAddress(property.address) : null;
+  const latitude = property.latitude;
+  const longitude = property.longitude;
+
+  if (exists(pid) && pid.length > 0 && pid !== '0') {
+    return { label: NameSourceType.PID, value: pidFormatter(pid.toString()) };
+  } else if (exists(pin) && pin.length > 0 && pin !== '0') {
+    return { label: NameSourceType.PIN, value: pin.toString() };
+  } else if (exists(planNumber) && planNumber?.toString()?.length > 0) {
+    return { label: NameSourceType.PLAN, value: planNumber.toString() };
+  } else if (exists(latitude) && exists(longitude)) {
+    return {
+      label: NameSourceType.LOCATION,
+      value: compact([longitude.toFixed(6), latitude.toFixed(6)]).join(', '),
+    };
+  } else if (exists(address) && address?.length > 0) {
+    return { label: NameSourceType.ADDRESS, value: address ?? '' };
+  }
+
+  return { label: NameSourceType.NONE, value: '' };
 };
 
 export const mapFeatureToProperty = (
@@ -480,8 +473,8 @@ export const areSelectedFeaturesEqual = (
   lhs: SelectedFeatureDataset,
   rhs: SelectedFeatureDataset,
 ) => {
-  const lhsName = getPropertyName(featuresetToMapProperty(lhs));
-  const rhsName = getPropertyName(featuresetToMapProperty(rhs));
+  const lhsName = getPropertyNameFromSelectedFeatureSet(lhs);
+  const rhsName = getPropertyNameFromSelectedFeatureSet(rhs);
   if (
     (lhsName.label === rhsName.label &&
       lhsName.label !== NameSourceType.NONE &&
