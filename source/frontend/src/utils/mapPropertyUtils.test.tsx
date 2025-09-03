@@ -22,7 +22,6 @@ import {
   getPrettyLatLng,
   getPropertyName,
   isLatLngInFeatureSetBoundary,
-  latLngFromMapProperty,
   latLngToApiLocation,
   locationFromFileProperty,
   NameSourceType,
@@ -331,21 +330,6 @@ describe('mapPropertyUtils', () => {
     ) => {
       const apiGeometry = latLngToApiLocation(latitude, longitude);
       expect(apiGeometry).toEqual(expectedValue);
-    },
-  );
-
-  it.each([
-    [{ fileLocation: { lat: 4, lng: 5 } }, { lat: 4, lng: 5 }],
-    [
-      { latitude: 4, longitude: 5 },
-      { lat: 4, lng: 5 },
-    ],
-    [undefined, { lat: 0, lng: 0 }],
-  ])(
-    'latLngFromMapProperty test with file property %o - expected %o',
-    (mapProperty: IMapProperty | undefined | null, expectedValue: LatLngLiteral | null) => {
-      const latLng = latLngFromMapProperty(mapProperty);
-      expect(latLng).toEqual(expectedValue);
     },
   );
 

@@ -8,7 +8,7 @@ import {
   Point,
   Polygon,
 } from 'geojson';
-import { geoJSON, LatLngLiteral } from 'leaflet';
+import { LatLngLiteral } from 'leaflet';
 import { chain, compact, isNumber } from 'lodash';
 import polylabel from 'polylabel';
 import { toast } from 'react-toastify';
@@ -151,17 +151,6 @@ export const getApiPropertyName = (
   return { label: NameSourceType.NONE, value: '' };
 };
 
-export const mapFeatureToProperty = (
-  selectedFeature: Feature<Geometry, GeoJsonProperties>,
-): IMapProperty => {
-  const latLng = selectedFeature?.geometry
-    ? geoJSON(selectedFeature.geometry).getBounds().getCenter()
-    : undefined;
-  const latitude = selectedFeature?.properties?.CLICK_LAT_LNG?.lat ?? latLng?.lat ?? undefined;
-  const longitude = selectedFeature?.properties?.CLICK_LAT_LNG?.lng ?? latLng?.lng ?? undefined;
-  return toMapProperty(selectedFeature, 'unknown', latitude, longitude);
-};
-
 export const getFeatureBoundedCenter = (feature: Feature<Geometry, GeoJsonProperties>) => {
   if (feature?.geometry?.type === ApiGen_CodeTypes_GeoJsonTypes.Polygon) {
     const boundedCenter = polylabel(
@@ -184,31 +173,6 @@ export const getFeatureBoundedCenter = (feature: Feature<Geometry, GeoJsonProper
     );
   }
 };
-
-function toMapProperty(
-  feature: Feature<Geometry, GeoJsonProperties>,
-  address?: string,
-  latitude?: number,
-  longitude?: number,
-): IMapProperty {
-  return {
-    propertyId: feature?.properties?.PROPERTY_ID,
-    pid: feature?.properties?.PID?.toString() ?? undefined,
-    pin: feature?.properties?.PIN?.toString() ?? undefined,
-    latitude: latitude,
-    longitude: longitude,
-    fileLocation: { lat: latitude, lng: longitude },
-    planNumber: feature?.properties?.PLAN_NUMBER?.toString() ?? undefined,
-    address: address,
-    legalDescription: feature?.properties?.LEGAL_DESCRIPTION,
-    region: feature?.properties?.REGION_NUMBER,
-    regionName: feature?.properties?.REGION_NAME,
-    district: feature?.properties?.DISTRICT_NUMBER,
-    districtName: feature?.properties?.DISTRICT_NAME,
-    landArea: feature?.properties?.FEATURE_AREA_SQM,
-    areaUnit: AreaUnitTypes.SquareMeters,
-  };
-}
 
 export function featuresetToMapProperty(
   featureSet: SelectedFeatureDataset,
@@ -369,15 +333,6 @@ export function boundaryFromFileProperty(
     pimsGeomeryToGeometry(fileProperty?.property?.location) ??
     null
   );
-}
-
-export function latLngFromMapProperty(
-  mapProperty: IMapProperty | undefined | null,
-): LatLngLiteral | null {
-  return {
-    lat: Number(mapProperty?.fileLocation?.lat ?? mapProperty?.latitude ?? 0),
-    lng: Number(mapProperty?.fileLocation?.lng ?? mapProperty?.longitude ?? 0),
-  };
 }
 
 export function latLngLiteralToGeometry(latLng: LatLngLiteral | null | undefined): Point | null {
