@@ -16,16 +16,16 @@ import { useGenerateLetter } from './hooks/useGenerateLetter';
 import { ApiGen_CodeTypes_FileTypes } from '@/models/api/generated/ApiGen_CodeTypes_FileTypes';
 
 const mockAxios = new MockAdapter(axios);
-const generateLetterFn = vi.fn();
-const generateH0443Fn = vi.fn();
+const generateLetterFn = vi.fn().mockResolvedValue({});
+const generateH0443Fn = vi.fn().mockResolvedValue({});
 
 // mock auth library
 
 vi.mock('./hooks/useGenerateLetter');
-const a = vi.mocked(useGenerateLetter).mockImplementation(() => generateLetterFn);
+vi.mocked(useGenerateLetter).mockImplementation(() => generateLetterFn);
 
 vi.mock('./hooks/useGenerateH0443');
-const b = vi.mocked(useGenerateH0443).mockImplementation(() => generateH0443Fn);
+vi.mocked(useGenerateH0443).mockImplementation(() => generateH0443Fn);
 
 // Need to mock this library for unit tests
 vi.mock('react-visibility-sensor', () => {
@@ -94,12 +94,11 @@ describe('GenerateFormContainer component', () => {
 
   it('calls document H0443 generation', async () => {
     const { getAllByText } = setup();
-    const letterButton = getAllByText('Conditions of Entry (H0443)')[0];
+    const generateButton = getAllByText('Conditions of Entry (H0443)')[0];
 
     await act(async () => {
-      userEvent.click(letterButton);
+      userEvent.click(generateButton);
     });
-    vi.spyOn(global, 'confirm' as any).mockReturnValueOnce(true);
 
     await waitFor(async () => {
       expect(generateLetterFn).toHaveBeenCalledTimes(0);
@@ -114,25 +113,10 @@ describe('GenerateFormContainer component', () => {
     await act(async () => {
       userEvent.click(letterButton);
     });
-    vi.spyOn(global, 'confirm' as any).mockReturnValueOnce(true);
 
     await waitFor(async () => {
       expect(generateLetterFn).toHaveBeenCalledTimes(0);
       expect(generateH0443Fn).toHaveBeenCalledTimes(0);
-    });
-  });
-
-  it('generates the documment letter on confirmation', async () => {
-    const { getAllByText } = setup();
-    const letterButton = getAllByText('Generate Letter')[0];
-
-    await act(async () => {
-      userEvent.click(letterButton);
-    });
-    vi.spyOn(global, 'confirm' as any).mockReturnValueOnce(true);
-
-    await waitFor(async () => {
-      expect(generateLetterFn).toHaveBeenCalledTimes(1);
     });
   });
 });

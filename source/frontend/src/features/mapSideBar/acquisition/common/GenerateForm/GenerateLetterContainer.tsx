@@ -2,12 +2,10 @@ import { FormikProps } from 'formik/dist/types';
 import { useCallback, useMemo, useRef, useState } from 'react';
 
 import LoadingBackdrop from '@/components/common/LoadingBackdrop';
-import { Claims } from '@/constants/index';
 import { InterestHolderType } from '@/constants/interestHolderTypes';
 import { useApiContacts } from '@/hooks/pims-api/useApiContacts';
 import { useAcquisitionProvider } from '@/hooks/repositories/useAcquisitionProvider';
 import { useInterestHolderRepository } from '@/hooks/repositories/useInterestHolderRepository';
-import { useKeycloakWrapper } from '@/hooks/useKeycloakWrapper';
 import { useModalManagement } from '@/hooks/useModalManagement';
 import { ApiGen_CodeTypes_FormTypes } from '@/models/api/generated/ApiGen_CodeTypes_FormTypes';
 import { Api_GenerateOwner } from '@/models/generate/GenerateOwner';
@@ -31,7 +29,6 @@ const GenerateLetterContainer: React.FunctionComponent<
 
   const [fullRecipientsList, setFullRecipientsList] = useState<LetterRecipientModel[]>([]);
 
-  const { hasClaim } = useKeycloakWrapper();
   const formikRef = useRef<FormikProps<LetterRecipientsForm>>(null);
 
   const { getPersonConcept, getOrganizationConcept } = useApiContacts();
@@ -138,23 +135,19 @@ const GenerateLetterContainer: React.FunctionComponent<
 
   return (
     <>
-      {hasClaim(Claims.FORM_ADD) && (
-        <>
-          <LoadingBackdrop show={isLoading} />
-          <GenerateItemView
-            label="Generate Letter"
-            formType={ApiGen_CodeTypes_FormTypes.LETTER}
-            onGenerate={handleGenerateClick}
-          />
-          <GenerateLetterRecipientsModal
-            isOpened={isGenerateLetterModalOpened}
-            recipientList={fullRecipientsList}
-            onCancelClick={handleGenerateLetterCancel}
-            onGenerateLetterOk={handleGenerateLetterOk}
-            formikRef={formikRef}
-          />
-        </>
-      )}
+      <LoadingBackdrop show={isLoading} />
+      <GenerateItemView
+        label="Generate Letter"
+        formType={ApiGen_CodeTypes_FormTypes.LETTER}
+        onGenerate={handleGenerateClick}
+      />
+      <GenerateLetterRecipientsModal
+        isOpened={isGenerateLetterModalOpened}
+        recipientList={fullRecipientsList}
+        onCancelClick={handleGenerateLetterCancel}
+        onGenerateLetterOk={handleGenerateLetterOk}
+        formikRef={formikRef}
+      />
     </>
   );
 };

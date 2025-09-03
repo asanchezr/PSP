@@ -9,7 +9,7 @@ import { ApiGen_CodeTypes_LeasePaymentReceivableTypes } from '@/models/api/gener
 import GenerateFormView from '../acquisition/common/GenerateForm/GenerateFormView';
 import { useGenerateLicenceOfOccupation } from '../acquisition/common/GenerateForm/hooks/useGenerateLicenceOfOccupation';
 
-const onGenerate = vi.fn();
+const onGenerate = vi.fn().mockResolvedValue({});
 vi.mock('../acquisition/common/GenerateForm/hooks/useGenerateLicenceOfOccupation');
 vi.mocked(useGenerateLicenceOfOccupation).mockReturnValue(onGenerate);
 
