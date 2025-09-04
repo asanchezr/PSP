@@ -32,7 +32,7 @@ class ManagementFileDetails {
   async navigateManagementFileListView() {
     await this.page
       .locator("//a[contains(text(), 'Manage Management File')]")
-      .click({force: true});
+      .click({ force: true });
   }
 
   async navigateManagementFileListActivities() {
@@ -124,10 +124,12 @@ class ManagementFileDetails {
     // Product
     if (managementFile.ManagementMinistryProduct !== null) {
       // Wait for the select element to appear
-      await this.page.locator('#input-productId').waitFor({ state: 'attached' });
-      await this.page.locator('#input-productId')
+      await this.page
+        .locator("#input-productId")
+        .waitFor({ state: "attached" });
+      await this.page
+        .locator("#input-productId")
         .selectOption({ label: managementFile.ManagementMinistryProduct });
-
     }
 
     // Funding

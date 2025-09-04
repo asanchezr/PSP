@@ -260,15 +260,18 @@ When(
 
     //Verify Pagination
     await this.sharedPagination.choosePaginationOption(5);
-    const expectedPaginationCount5 = await this.searchManagementFiles.mgmtTableResultNumber();
+    const expectedPaginationCount5 =
+      await this.searchManagementFiles.mgmtTableResultNumber();
     expect(expectedPaginationCount5).toBe(5);
 
     await this.sharedPagination.choosePaginationOption(10);
-    const expectedPaginationCount10 = await this.searchManagementFiles.mgmtTableResultNumber();
+    const expectedPaginationCount10 =
+      await this.searchManagementFiles.mgmtTableResultNumber();
     expect(expectedPaginationCount10).toBe(10);
 
     await this.sharedPagination.choosePaginationOption(20);
-    const expectedPaginationCount20 = await this.searchManagementFiles.mgmtTableResultNumber();
+    const expectedPaginationCount20 =
+      await this.searchManagementFiles.mgmtTableResultNumber();
     expect(expectedPaginationCount20).toBeLessThan(20);
 
     //await this.sharedPagination.choosePaginationOption(50);
@@ -310,9 +313,7 @@ When(
     const firstFilePurposeAscResult =
       await this.searchManagementFiles.firstMgmtPurpose();
 
-    expect(firstFilePurposeDescResult).not.toEqual(
-      firstFilePurposeAscResult
-    );
+    expect(firstFilePurposeDescResult).not.toEqual(firstFilePurposeAscResult);
 
     //Verify Column Sorting by Status
     await this.searchManagementFiles.orderByMgmtStatus();
@@ -323,9 +324,7 @@ When(
     const firstFileStatusAscResult =
       await this.searchManagementFiles.firstMgmtStatus();
 
-    expect(firstFileStatusDescResult).not.toEqual(
-      firstFileStatusAscResult
-    );
+    expect(firstFileStatusDescResult).not.toEqual(firstFileStatusAscResult);
 
     //Verify Pagination display different set of results
     await this.sharedPagination.resetSearch();

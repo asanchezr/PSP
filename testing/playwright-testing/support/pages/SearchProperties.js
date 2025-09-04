@@ -1,9 +1,9 @@
 class SearchProperties {
-    constructor(page) {
-        this.page = page;
-    }
+  constructor(page) {
+    this.page = page;
+  }
 
-    async searchPropertyByPID(pid) {
+  async searchPropertyByPID(pid) {
     await this.page.locator("#input-searchBy").selectOption({ label: "PID" });
     await this.page.locator("#input-pid").fill("");
     await this.page.locator("#input-pid").fill(pid);
@@ -23,7 +23,9 @@ class SearchProperties {
       .selectOption({ label: "Address" });
     await this.page.locator("#input-address").fill("");
     await this.page.locator("#input-address").fill(address);
-    await this.page.locator("ul[class='suggestionList'] li:first-child").click();
+    await this.page
+      .locator("ul[class='suggestionList'] li:first-child")
+      .click();
     await this.page.getByTestId("search").click();
   }
 
@@ -84,7 +86,11 @@ class SearchProperties {
   }
 
   async selectNthSearchResult(index) {
-    await this.page.locator(`div[data-testid="search-property-${index}"] div:nth-child(1) div`).click();
+    await this.page
+      .locator(
+        `div[data-testid="search-property-${index}"] div:nth-child(1) div`
+      )
+      .click();
   }
 
   async addPropertyInfoToOpenFile() {
@@ -93,7 +99,9 @@ class SearchProperties {
   }
 
   async selectPinOnMap() {
-    await this.page.locator("div[class='leaflet-pane leaflet-marker-pane'] img").click();
+    await this.page
+      .locator("div[class='leaflet-pane leaflet-marker-pane'] img")
+      .click();
   }
 }
 

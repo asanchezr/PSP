@@ -60,21 +60,26 @@ class Notes {
   async deleteLastSecondNote() {
     await this.page.getByTestId("remove-note-1").click();
 
-    await expect(
-      this.page.locator("div[class='modal-title h4']")
-    ).toHaveText("Delete Note");
-    expect(
-      this.page.locator("div[class='modal-body']")
-    ).toHaveText("Are you sure you want to delete this note?");
+    await expect(this.page.locator("div[class='modal-title h4']")).toHaveText(
+      "Delete Note"
+    );
+    expect(this.page.locator("div[class='modal-body']")).toHaveText(
+      "Are you sure you want to delete this note?"
+    );
     await this.page.getByTestId("ok-modal-button").click();
   }
 
   async verifyNotesAddNew() {
-
-    const titleText = (await this.page.locator("div[class='modal-title h4']").textContent())?.trim() || "";
+    const titleText =
+      (
+        await this.page.locator("div[class='modal-title h4']").textContent()
+      )?.trim() || "";
     expect(titleText).toEqual("Notes");
 
-    const subtitleText = (await this.page.locator("label[for='input-note.note']").textContent())?.trim() || "";
+    const subtitleText =
+      (
+        await this.page.locator("label[for='input-note.note']").textContent()
+      )?.trim() || "";
     expect(subtitleText).toEqual("Type a note:");
 
     await expect(this.page.getByTestId("note-field")).toBeVisible();
@@ -83,22 +88,38 @@ class Notes {
   }
 
   async verifyNotesEditForm() {
+    expect(
+      this.page.locator("//div[normalize-space()='Created:']")
+    ).toBeVisible();
+    expect(
+      this.page.locator(
+        "//div[normalize-space()='Created:']/following-sibling::div/span/strong"
+      )
+    ).toBeVisible();
+    expect(
+      this.page.locator("//div[normalize-space()='Last updated:']")
+    ).toBeVisible();
+    expect(
+      this.page.locator(
+        "//div[normalize-space()='Last updated:']/following-sibling::div/span/strong"
+      )
+    ).toBeVisible();
 
-    expect(this.page.locator("//div[normalize-space()='Created:']")).toBeVisible();
-    expect(this.page.locator("//div[normalize-space()='Created:']/following-sibling::div/span/strong")).toBeVisible();
-    expect(this.page.locator("//div[normalize-space()='Last updated:']")).toBeVisible();
-    expect(this.page.locator("//div[normalize-space()='Last updated:']/following-sibling::div/span/strong")).toBeVisible();
-
-    await this.page.locator("div[class='modal-body']").waitFor({ state: 'visible' });
+    await this.page
+      .locator("div[class='modal-body']")
+      .waitFor({ state: "visible" });
     const username = await this.page
-        .locator(
-          "div[class='modal-body'] span[data-testid='tooltip-icon-userNameTooltip']"
-        )
-        .count();
+      .locator(
+        "div[class='modal-body'] span[data-testid='tooltip-icon-userNameTooltip']"
+      )
+      .count();
 
     expect(username).toBe(2);
 
-    const labelText = (await this.page.locator("label[for='input-note']").textContent())?.trim() || "";
+    const labelText =
+      (
+        await this.page.locator("label[for='input-note']").textContent()
+      )?.trim() || "";
     expect(labelText).toEqual("Type a note:");
 
     expect(this.page.getByTestId("note-field")).toBeVisible();
@@ -114,24 +135,32 @@ class Notes {
     expect(this.page.getByTestId("note-add-button")).toBeVisible();
 
     await expect(
-      this.page.locator(
-        "//div[@data-testid='notesTable']/div[@class='thead thead-light']/div/div/div[contains(text(),'Note')]"
-      ).first()
+      this.page
+        .locator(
+          "//div[@data-testid='notesTable']/div[@class='thead thead-light']/div/div/div[contains(text(),'Note')]"
+        )
+        .first()
     ).toBeVisible();
     await expect(
-      this.page.locator(
-        "//div[@data-testid='notesTable']/div[@class='thead thead-light']/div/div/div[contains(text(),'Created date')]"
-      ).first()
+      this.page
+        .locator(
+          "//div[@data-testid='notesTable']/div[@class='thead thead-light']/div/div/div[contains(text(),'Created date')]"
+        )
+        .first()
     ).toBeVisible();
     await expect(
-      this.page.locator(
-        "//div[@data-testid='notesTable']/div[@class='thead thead-light']/div/div/div[contains(text(),'Last updated by')]"
-      ).first()
+      this.page
+        .locator(
+          "//div[@data-testid='notesTable']/div[@class='thead thead-light']/div/div/div[contains(text(),'Last updated by')]"
+        )
+        .first()
     ).toBeVisible();
     await expect(
-      this.page.locator(
-        "//div[@data-testid='notesTable']/div[@class='thead thead-light']/div/div/div[contains(text(),'Actions')]"
-      ).first()
+      this.page
+        .locator(
+          "//div[@data-testid='notesTable']/div[@class='thead thead-light']/div/div/div[contains(text(),'Actions')]"
+        )
+        .first()
     ).toBeVisible();
 
     if (
@@ -142,20 +171,31 @@ class Notes {
         .count()) > 0
     ) {
       await expect(
-        this.page.locator(
-          "//div[@data-testid='notesTable']/div[@class='tbody']"
-        ).first()
+        this.page
+          .locator("//div[@data-testid='notesTable']/div[@class='tbody']")
+          .first()
       ).toBeVisible();
     } else {
       await expect(
-        this.page.locator("//div[contains(text(),'No matching Notes found')]").first()
+        this.page
+          .locator("//div[contains(text(),'No matching Notes found')]")
+          .first()
       ).toBeVisible();
     }
   }
 
   async notesTabCount() {
-    await this.page.locator("//div[@data-testid='notesTable']/div[@class='tbody']/div[@class='tr-wrapper']").first().waitFor({state: 'visible'});
-    const totalRecords = this.page.locator("//div[@data-testid='notesTable']/div[@class='tbody']/div[@class='tr-wrapper']").count();
+    await this.page
+      .locator(
+        "//div[@data-testid='notesTable']/div[@class='tbody']/div[@class='tr-wrapper']"
+      )
+      .first()
+      .waitFor({ state: "visible" });
+    const totalRecords = this.page
+      .locator(
+        "//div[@data-testid='notesTable']/div[@class='tbody']/div[@class='tr-wrapper']"
+      )
+      .count();
     return totalRecords;
   }
 
