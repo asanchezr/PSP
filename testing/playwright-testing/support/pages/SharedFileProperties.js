@@ -10,92 +10,92 @@ class SharedFileProperties {
     clickAndWaitFor(
       this.page,
       "button[title='Change properties']",
-      "a[data-rb-event-key='list']"
+      "//div[text()='Selected Properties']"
     );
   }
 
-  async navigateToSearchTab() {
-    clickAndWaitFor(
-      this.page,
-      "a[data-rb-event-key='list']",
-      "input[id='input-pid']"
-    );
-  }
+  // async navigateToSearchTab() {
+  //   clickAndWaitFor(
+  //     this.page,
+  //     "a[data-rb-event-key='list']",
+  //     "input[id='input-pid']"
+  //   );
+  // }
 
-  async selectPropertyByPID(pid) {
-    await this.page.locator("#input-searchBy").selectOption({ label: "PID" });
-    await this.page.locator("#input-pid").fill("");
-    await this.page.locator("#input-pid").fill(pid);
-    await this.page.getByTestId("search").click();
-  }
+  // async selectPropertyByPID(pid) {
+  //   await this.page.locator("#input-searchBy").selectOption({ label: "PID" });
+  //   await this.page.locator("#input-pid").fill("");
+  //   await this.page.locator("#input-pid").fill(pid);
+  //   await this.page.getByTestId("search").click();
+  // }
 
-  async selectPropertyByPIN(pin) {
-    await this.page.locator("#input-searchBy").selectOption({ label: "PIN" });
-    await this.page.locator("#input-pin").fill("");
-    await this.page.locator("#input-pin").fill(pin);
-    await this.page.getByTestId("search").click();
-  }
+  // async selectPropertyByPIN(pin) {
+  //   await this.page.locator("#input-searchBy").selectOption({ label: "PIN" });
+  //   await this.page.locator("#input-pin").fill("");
+  //   await this.page.locator("#input-pin").fill(pin);
+  //   await this.page.getByTestId("search").click();
+  // }
 
-  async selectPropertyByAddress(address) {
-    await this.page
-      .locator("#input-searchBy")
-      .selectOption({ label: "Address" });
-    await this.page.locator("#input-address").fill("");
-    await this.page.locator("#input-address").fill(address);
-    await this.page.getByTestId("search").click();
-  }
+  // async selectPropertyByAddress(address) {
+  //   await this.page
+  //     .locator("#input-searchBy")
+  //     .selectOption({ label: "Address" });
+  //   await this.page.locator("#input-address").fill("");
+  //   await this.page.locator("#input-address").fill(address);
+  //   await this.page.getByTestId("search").click();
+  // }
 
-  async selectPropertyByPlan(plan) {
-    await this.page
-      .locator("#input-searchBy")
-      .selectOption({ label: "Plan #" });
-    await this.page.locator("#input-planNumber").fill("");
-    await this.page.locator("#input-planNumber").fill(plan);
-    await this.page.getByTestId("search").click();
-  }
+  // async selectPropertyByPlan(plan) {
+  //   await this.page
+  //     .locator("#input-searchBy")
+  //     .selectOption({ label: "Plan #" });
+  //   await this.page.locator("#input-planNumber").fill("");
+  //   await this.page.locator("#input-planNumber").fill(plan);
+  //   await this.page.getByTestId("search").click();
+  // }
 
-  async selectPropertyByLegalDescription(legalDescription) {
-    await this.page
-      .locator("#input-searchBy")
-      .selectOption({ label: "Legal Description" });
-    await this.page.locator("#input-legalDescription").fill("");
-    await this.page.locator("#input-legalDescription").fill(legalDescription);
-    await this.page.getByTestId("search").click();
-  }
+  // async selectPropertyByLegalDescription(legalDescription) {
+  //   await this.page
+  //     .locator("#input-searchBy")
+  //     .selectOption({ label: "Legal Description" });
+  //   await this.page.locator("#input-legalDescription").fill("");
+  //   await this.page.locator("#input-legalDescription").fill(legalDescription);
+  //   await this.page.getByTestId("search").click();
+  // }
 
-  async selectPropertyByLongLant(coordinates) {
-    await this.page
-      .locator("#input-searchBy")
-      .selectOption({ label: "Lat/Long" });
+  // async selectPropertyByLongLant(coordinates) {
+  //   await this.page
+  //     .locator("#input-searchBy")
+  //     .selectOption({ label: "Lat/Long" });
 
-    await this.page
-      .locator("#number-input-coordinates\\.latitude\\.degrees")
-      .fill(`${coordinates.LatitudeDegree}`);
-    await this.page
-      .locator("#number-input-coordinates\\.latitude\\.minutes")
-      .fill(`${coordinates.LatitudeMinutes}`);
-    await this.page
-      .locator("#number-input-coordinates\\.latitude\\.seconds")
-      .fill(`${coordinates.LatitudeSeconds}`);
-    await this.page
-      .locator("#input-coordinates\\.latitude\\.direction")
-      .selectOption({ label: coordinates.LatitudeDirection });
+  //   await this.page
+  //     .locator("#number-input-coordinates\\.latitude\\.degrees")
+  //     .fill(`${coordinates.LatitudeDegree}`);
+  //   await this.page
+  //     .locator("#number-input-coordinates\\.latitude\\.minutes")
+  //     .fill(`${coordinates.LatitudeMinutes}`);
+  //   await this.page
+  //     .locator("#number-input-coordinates\\.latitude\\.seconds")
+  //     .fill(`${coordinates.LatitudeSeconds}`);
+  //   await this.page
+  //     .locator("#input-coordinates\\.latitude\\.direction")
+  //     .selectOption({ label: coordinates.LatitudeDirection });
 
-    await this.page
-      .locator("#number-input-coordinates\\.longitude\\.degrees")
-      .fill(`${coordinates.LongitudeDegree}`);
-    await this.page
-      .locator("#number-input-coordinates\\.longitude\\.minutes")
-      .fill(`${coordinates.LongitudeMinutes}`);
-    await this.page
-      .locator("#number-input-coordinates\\.longitude\\.seconds")
-      .fill(`${coordinates.LongitudeSeconds}`);
-    await this.page
-      .locator("#input-coordinates\\.longitude\\.direction")
-      .selectOption({ label: coordinates.LongitudeDirection });
+  //   await this.page
+  //     .locator("#number-input-coordinates\\.longitude\\.degrees")
+  //     .fill(`${coordinates.LongitudeDegree}`);
+  //   await this.page
+  //     .locator("#number-input-coordinates\\.longitude\\.minutes")
+  //     .fill(`${coordinates.LongitudeMinutes}`);
+  //   await this.page
+  //     .locator("#number-input-coordinates\\.longitude\\.seconds")
+  //     .fill(`${coordinates.LongitudeSeconds}`);
+  //   await this.page
+  //     .locator("#input-coordinates\\.longitude\\.direction")
+  //     .selectOption({ label: coordinates.LongitudeDirection });
 
-    await this.page.getByTestId("search").click();
-  }
+  //   await this.page.getByTestId("search").click();
+  // }
 
   async addNameSelectedProperty(name, index) {
     await this.page
@@ -103,132 +103,132 @@ class SharedFileProperties {
       .fill(name);
   }
 
-  async selectFirstOptionFromSearch() {
-    const firstResultChoice = await this.page.locator(
-      "div[data-testid='map-properties'] div[class='tbody'] div[class='tr-wrapper']:first-child div input"
-    );
-    await firstResultChoice.waitFor({ state: "visible" });
-    await firstResultChoice.check();
+  // async selectFirstOptionFromSearch() {
+  //   const firstResultChoice = await this.page.locator(
+  //     "div[data-testid='map-properties'] div[class='tbody'] div[class='tr-wrapper']:first-child div input"
+  //   );
+  //   await firstResultChoice.waitFor({ state: "visible" });
+  //   await firstResultChoice.check();
 
-    const addPropertyBttn = await this.page.getByTestId(
-      "add-selected-properties-button"
-    );
-    await addPropertyBttn.waitFor({ state: "visible" });
-    await addPropertyBttn.click();
+  //   const addPropertyBttn = await this.page.getByTestId(
+  //     "add-selected-properties-button"
+  //   );
+  //   await addPropertyBttn.waitFor({ state: "visible" });
+  //   await addPropertyBttn.click();
 
-    while (
-      (await this.page.locator("div[class='modal-content']").count()) > 0
-    ) {
-      if (
-        await this.page
-          .locator("div[class='modal-content']")
-          .textContent()
-          .includes(
-            "This property has already been added to one or more acquisition files."
-          )
-      ) {
-        await expect(
-          this.page.locator(
-            "div[class='modal-header'] div[class='modal-title h4']"
-          )
-        ).toBe("User Override Required");
-        await expect(
-          this.page.locator("div[class='modal-body']")
-        ).toHaveTextContent(
-          "This property has already been added to one or more acquisition files."
-        );
-        await expect(
-          this.page.locator("div[class='modal-body']")
-        ).toHaveTextContent("Do you want to acknowledge and proceed?");
-      }
-      if (
-        await this.page
-          .locator("div[class='modal-content']")
-          .textContent()
-          .includes(
-            "This property has already been added to one or more research files."
-          )
-      ) {
-        expect(
-          this.page.locator(
-            "div[class='modal-header'] div[class='modal-title h4']"
-          )
-        ).toBe("User Override Required");
-        await expect(
-          this.page.locator("div[class='modal-body']")
-        ).toHaveTextContent(
-          "This property has already been added to one or more research files."
-        );
-        await expect(
-          this.page.locator("div[class='modal-body']")
-        ).toHaveTextContent("Do you want to acknowledge and proceed?");
-      }
-      if (
-        await this.page
-          .locator("div[class='modal-content']")
-          .textContent()
-          .includes(
-            "This property has already been added to one or more disposition files."
-          )
-      ) {
-        expect(
-          this.page.locator(
-            "div[class='modal-header'] div[class='modal-title h4']"
-          )
-        ).toBe("User Override Required");
-        await expect(
-          this.page.locator("div[class='modal-body']")
-        ).toHaveTextContent(
-          "This property has already been added to one or more disposition files."
-        );
-        await expect(
-          this.page.locator("div[class='modal-body']")
-        ).toHaveTextContent("Do you want to acknowledge and proceed?");
-      }
-      if (
-        await this.page
-          .locator("div[class='modal-content']")
-          .textContent()
-          .includes(
-            "This property has already been added to one or more files."
-          )
-      ) {
-        expect(
-          this.page.locator(
-            "div[class='modal-header'] div[class='modal-title h4']"
-          )
-        ).toBe("User Override Required");
-        await expect(
-          this.page.locator("div[class='modal-body']")
-        ).toHaveTextContent(
-          "This property has already been added to one or more files."
-        );
-        await expect(
-          this.page.locator("div[class='modal-body']")
-        ).toHaveTextContent("Do you want to acknowledge and proceed?");
-      }
-      if (
-        await sharedModals
-          .ModalContent()
-          .Contains(
-            "You have selected a property not previously in the inventory."
-          )
-      ) {
-        expect(
-          this.page.locator(
-            "div[class='modal-header'] div[class='modal-title h4']"
-          )
-        ).toBe("Not inventory property");
-        await expect(
-          this.page.locator("div[class='modal-body']")
-        ).toHaveTextContent(
-          "You have selected a property not previously in the inventory. Do you want to add this property to the lease?"
-        );
-      }
+  //   while (
+  //     (await this.page.locator("div[class='modal-content']").count()) > 0
+  //   ) {
+  //     if (
+  //       await this.page
+  //         .locator("div[class='modal-content']")
+  //         .textContent()
+  //         .includes(
+  //           "This property has already been added to one or more acquisition files."
+  //         )
+  //     ) {
+  //       await expect(
+  //         this.page.locator(
+  //           "div[class='modal-header'] div[class='modal-title h4']"
+  //         )
+  //       ).toBe("User Override Required");
+  //       await expect(
+  //         this.page.locator("div[class='modal-body']")
+  //       ).toHaveTextContent(
+  //         "This property has already been added to one or more acquisition files."
+  //       );
+  //       await expect(
+  //         this.page.locator("div[class='modal-body']")
+  //       ).toHaveTextContent("Do you want to acknowledge and proceed?");
+  //     }
+  //     if (
+  //       await this.page
+  //         .locator("div[class='modal-content']")
+  //         .textContent()
+  //         .includes(
+  //           "This property has already been added to one or more research files."
+  //         )
+  //     ) {
+  //       expect(
+  //         this.page.locator(
+  //           "div[class='modal-header'] div[class='modal-title h4']"
+  //         )
+  //       ).toBe("User Override Required");
+  //       await expect(
+  //         this.page.locator("div[class='modal-body']")
+  //       ).toHaveTextContent(
+  //         "This property has already been added to one or more research files."
+  //       );
+  //       await expect(
+  //         this.page.locator("div[class='modal-body']")
+  //       ).toHaveTextContent("Do you want to acknowledge and proceed?");
+  //     }
+  //     if (
+  //       await this.page
+  //         .locator("div[class='modal-content']")
+  //         .textContent()
+  //         .includes(
+  //           "This property has already been added to one or more disposition files."
+  //         )
+  //     ) {
+  //       expect(
+  //         this.page.locator(
+  //           "div[class='modal-header'] div[class='modal-title h4']"
+  //         )
+  //       ).toBe("User Override Required");
+  //       await expect(
+  //         this.page.locator("div[class='modal-body']")
+  //       ).toHaveTextContent(
+  //         "This property has already been added to one or more disposition files."
+  //       );
+  //       await expect(
+  //         this.page.locator("div[class='modal-body']")
+  //       ).toHaveTextContent("Do you want to acknowledge and proceed?");
+  //     }
+  //     if (
+  //       await this.page
+  //         .locator("div[class='modal-content']")
+  //         .textContent()
+  //         .includes(
+  //           "This property has already been added to one or more files."
+  //         )
+  //     ) {
+  //       expect(
+  //         this.page.locator(
+  //           "div[class='modal-header'] div[class='modal-title h4']"
+  //         )
+  //       ).toBe("User Override Required");
+  //       await expect(
+  //         this.page.locator("div[class='modal-body']")
+  //       ).toHaveTextContent(
+  //         "This property has already been added to one or more files."
+  //       );
+  //       await expect(
+  //         this.page.locator("div[class='modal-body']")
+  //       ).toHaveTextContent("Do you want to acknowledge and proceed?");
+  //     }
+  //     if (
+  //       await sharedModals
+  //         .ModalContent()
+  //         .Contains(
+  //           "You have selected a property not previously in the inventory."
+  //         )
+  //     ) {
+  //       expect(
+  //         this.page.locator(
+  //           "div[class='modal-header'] div[class='modal-title h4']"
+  //         )
+  //       ).toBe("Not inventory property");
+  //       await expect(
+  //         this.page.locator("div[class='modal-body']")
+  //       ).toHaveTextContent(
+  //         "You have selected a property not previously in the inventory. Do you want to add this property to the lease?"
+  //       );
+  //     }
 
-      await this.page.getByTestId("ok-modal-button").click();
-    }
-  }
+  //     await this.page.getByTestId("ok-modal-button").click();
+  //   }
+  // }
 
   async selectFirstPropertyOptionFromFile() {
     await this.page
@@ -254,21 +254,6 @@ class SharedFileProperties {
       )
       .isVisible();
 
-    //Tabs search options
-    await this.page.getByRole("tab", { name: "Locate on Map" }).isVisible();
-    await this.page.getByRole("tab", { name: "Search" }).isVisible();
-
-    //Select a Property Details
-    await this.page.getByRole("label", { hasText: "PID:" }).isVisible();
-    await this.page.getByRole("label", { hasText: "PIN:" }).isVisible();
-    await this.page.getByRole("label", { hasText: "Plan #:" }).isVisible();
-    await this.page.getByRole("label", { hasText: "Address:" }).isVisible();
-    await this.page.getByRole("label", { hasText: "Region:" }).isVisible();
-    await this.page.getByRole("label", { hasText: "District:" }).isVisible();
-    await this.page
-      .getByRole("label", { hasText: "Legal Description:" })
-      .isVisible();
-
     //Selected Properties section
     await this.page.getByText("Selected properties").isVisible();
     await this.page
@@ -277,50 +262,50 @@ class SharedFileProperties {
     await this.page.getByText("No Properties selected").isVisible();
   }
 
-  async verifySearchTabPropertiesFeature() {
-    const searchPropsTab = await this.page.locator(
-      "//a[contains(text(),'Search')]"
-    );
-    expect(searchPropsTab).toBeVisible();
+  // async verifySearchTabPropertiesFeature() {
+  //   const searchPropsTab = await this.page.locator(
+  //     "//a[contains(text(),'Search')]"
+  //   );
+  //   expect(searchPropsTab).toBeVisible();
 
-    const propertySubtitle = await this.page
-      .locator("div[data-testid='property-search-selector-section'] h2 div div")
-      .textContent();
-    expect(propertySubtitle).toEqual("Search for a property");
+  //   const propertySubtitle = await this.page
+  //     .locator("div[data-testid='property-search-selector-section'] h2 div div")
+  //     .textContent();
+  //   expect(propertySubtitle).toEqual("Search for a property");
 
-    const searchBySelect = await this.page.locator("#input-searchBy");
-    expect(searchBySelect).toBeVisible();
+  //   const searchBySelect = await this.page.locator("#input-searchBy");
+  //   expect(searchBySelect).toBeVisible();
 
-    const pidInput = await this.page.locator("#input-pid");
-    expect(pidInput).toBeVisible();
+  //   const pidInput = await this.page.locator("#input-pid");
+  //   expect(pidInput).toBeVisible();
 
-    const searchButton = await this.page.locator("#search-button");
-    expect(searchButton).toBeVisible();
+  //   const searchButton = await this.page.locator("#search-button");
+  //   expect(searchButton).toBeVisible();
 
-    const resetButton = await this.page.locator("#reset-button");
-    expect(resetButton).toBeVisible();
+  //   const resetButton = await this.page.locator("#reset-button");
+  //   expect(resetButton).toBeVisible();
 
-    const tableHeader = await this.page.locator(
-      "div[class='thead thead-light']"
-    );
-    expect(tableHeader).toBeVisible();
+  //   const tableHeader = await this.page.locator(
+  //     "div[class='thead thead-light']"
+  //   );
+  //   expect(tableHeader).toBeVisible();
 
-    await expect(
-      this.page.locator("input[data-testid='selectrow-parent']")
-    ).toBeVisible();
-    await expect(
-      this.page.locator("//div[@class='th']/div[contains(text(), 'PID')]")
-    ).toBeVisible();
-    await expect(
-      this.page.locator("//div[@class='th']/div[contains(text(), 'PIN')]")
-    ).toBeVisible();
-    await expect(
-      this.page.locator("//div[@class='th']/div[contains(text(), 'Plan #')]")
-    ).toBeVisible();
-    await expect(
-      this.page.locator("//div[@class='th']/div[contains(text(), 'Address')]")
-    ).toBeVisible();
-  }
+  //   await expect(
+  //     this.page.locator("input[data-testid='selectrow-parent']")
+  //   ).toBeVisible();
+  //   await expect(
+  //     this.page.locator("//div[@class='th']/div[contains(text(), 'PID')]")
+  //   ).toBeVisible();
+  //   await expect(
+  //     this.page.locator("//div[@class='th']/div[contains(text(), 'PIN')]")
+  //   ).toBeVisible();
+  //   await expect(
+  //     this.page.locator("//div[@class='th']/div[contains(text(), 'Plan #')]")
+  //   ).toBeVisible();
+  //   await expect(
+  //     this.page.locator("//div[@class='th']/div[contains(text(), 'Address')]")
+  //   ).toBeVisible();
+  // }
 
   async selectNthPropertyOptionFromFile(index) {
     const elementOrder = index++;
@@ -329,10 +314,6 @@ class SharedFileProperties {
         "div[data-testid='menu-item-row-" + elementOrder + "'] div:nth-child(3)"
       )
       .click();
-  }
-
-  async resetSearch() {
-    await this.page.getByTestId("reset-button").click();
   }
 
   async deleteLastPropertyFromFile() {

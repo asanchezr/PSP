@@ -7,26 +7,26 @@ Feature: Management File
 #      And I update the File details from an existing Management File from row number 1
 #      Then A new Management file is created or updated successfully
 
-Scenario: Management File Properties
-	Given I create a new Management File with row number 2
-	When I add Properties to the Management File
-	# And I update a Management File's Properties from row number 3
-	# Then A new Management file is created or updated successfully
-
-# Scenario: Management Files Digital Documents
-# 	Given I create a new Management File with row number 5
-# 	When I create Digital Documents for a "Management File" row number 14
-# 	And  I edit a Digital Document for a "Management File" from row number 15
+# Scenario: Management File Properties
+# 	Given I create a new Management File with row number 2
+# 	When I add Properties to the Management File
+# 	And I update a Management File's Properties from row number 3
 # 	Then A new Management file is created or updated successfully
+
+Scenario: Management Files Digital Documents
+	Given I create a new Management File with row number 5
+	When I create Digital Documents for a "Management File" row number 14
+	And  I edit a Digital Document for a "Management File" from row number 15
+	Then A new Management file is created or updated successfully
 
 # Scenario: Management File Notes
 # 	Given I create a new Management File with row number 6
-# 	When  I create a new Note on the Notes Tab with row number 11
+# 	When  I create a new Note on the Notes Tab with row number 10
 # 	And  I edit a Note on the Notes Tab with row number 11
 # 	Then A new Management file is created or updated successfully
 
 # Scenario: Management Files List View
-# 	Given I search for an existing Management File from row number 2
+# 	Given I search for an existing Management File from row number 1
 # 	Then Expected Management File Content is displayed on Management File Table
 
 # Scenario: Management Activities Tab

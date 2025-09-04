@@ -10,6 +10,7 @@ import SearchManagementFiles from "./pages/SearchManagementFiles.js";
 import SharedActivities from "./pages/SharedActivities.js";
 import SharedFileProperties from "./pages/SharedFileProperties.js";
 import SharedPagination from "./pages/SharedPagination.js";
+import SearchProperties from "./pages/SearchProperties.js";
 
 // Load environment variables from .env
 dotenv.config();
@@ -29,6 +30,7 @@ class CustomWorld {
     this.sharedActivities = null;
     this.sharedFileProperties = null;
     this.sharedPagination = null;
+    this.searchProperties = null;
   }
 
   async openBrowser() {
@@ -45,6 +47,7 @@ class CustomWorld {
     this.sharedActivities = new SharedActivities(this.page);
     this.sharedFileProperties = new SharedFileProperties(this.page);
     this.sharedPagination = new SharedPagination(this.page);
+    this.searchProperties = new SearchProperties(this.page);
   }
 
   async closeBrowser() {

@@ -97,13 +97,13 @@ async function clickAndWaitFor(
 
       // Wait for the target element to appear
       await page.waitForSelector(waitSelector, { timeout });
-      console.log("Success");
-      return; // Success — exit function
+      console.log("Success -" + clickSelector);
+      return;
     } catch (err) {
       lastError = err;
 
       if (attempt < maxRetries) {
-        console.warn(
+        console.log(
           `Attempt ${attempt} failed. Retrying click on "${clickSelector}"...`
         );
         await page.waitForTimeout(clickDelay);
@@ -122,7 +122,7 @@ async function fillTypeahead(page, selector, text, optionSelector) {
   // Clear and type slowly to mimic human typing
   await input.fill("");
   for (const char of text) {
-    await input.type(char, { delay: 50 });
+    await input.type(char, { delay: 10 });
   }
 
   // Wait for dropdown to appear

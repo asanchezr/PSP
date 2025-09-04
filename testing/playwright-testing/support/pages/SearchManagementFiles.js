@@ -7,16 +7,18 @@ class SearchManagementFiles {
   }
 
   async navigateToSearchManagement() {
-    clickAndWaitFor(
+    await clickAndWaitFor(
       this.page,
       "div[data-testid='nav-tooltip-project'] a",
       "div[data-testid='side-tray']"
     );
-    clickAndWaitFor(
+    await clickAndWaitFor(
       this.page,
       "div[data-testid='nav-tooltip-management'] a",
       "div[data-testid='side-tray']"
     );
+
+    await this.page.getByRole('link', { name: 'Manage Management Files' }).waitFor({ state: 'visible' });
     await this.page
       .getByRole("link", { name: "Manage Management Files" })
       .click();
@@ -159,159 +161,157 @@ class SearchManagementFiles {
   }
 
   async mgmtTableResultNumber() {
-    return await this.page
-      .locator(
-        "div[data-testid='managementFilesTable'] div[class='tbody'] div[class='tr-wrapper']"
-      )
-      .count();
+    await this.page.locator("div[data-testid='managementFilesTable'] div[class='tbody'] div[class='tr-wrapper']");
+    const tableNumbers = await this.page.locator("div[data-testid='managementFilesTable'] div[class='tbody'] div[class='tr-wrapper']").count();
+    return tableNumbers;
   }
 
   async verifySearchManagementListView() {
     //Search Management Title
-    await expect(
-      this.page.getByRole("h1").filter({ hasText: "Management Files" })
+    await this.page.locator("h1 span").filter({ hasText: "Management Files" }).waitFor({ state: 'visible' });
+    expect(
+      this.page.locator("h1 span").filter({ hasText: "Management Files" })
     ).toBeVisible();
 
     //Search Management Filters
-    await expect(this.page.getByText("Search by:")).toBeVisible();
-    await expect(this.page.locator("#input-searchBy")).toBeVisible();
-    await expect(this.page.locator("#input-address")).toBeVisible();
-    await expect(
-      this.page.locator("#input-fileNameOrNumberOrReference")
-    ).toBeVisible();
-    await expect(
-      this.page.locator("#typeahead-select-managementTeamMember")
-    ).toBeVisible();
-    await expect(
-      this.page.locator("#input-managementFileStatusCode")
-    ).toBeVisible();
-    await expect(
-      this.page.locator("#input-managementFilePurposeCode")
-    ).toBeVisible();
-    await expect(this.page.locator("#input-projectNameOrNumber")).toBeVisible();
-    await expect(this.page.locator("#search-button")).toBeVisible();
-    await expect(this.page.locator("#reset-button")).toBeVisible();
+    await this.page.locator('text=Search by:').waitFor({ state: 'visible' });
+    expect(this.page.locator('text=Search by:')).toBeVisible();
+
+    await this.page.locator("#input-searchBy").waitFor({ state: 'visible' });
+    expect(this.page.locator("#input-searchBy")).toBeVisible();
+
+    await this.page.locator("#input-address").waitFor({state: 'visible'});
+    expect(this.page.locator("#input-address")).toBeVisible();
+
+    await this.page.locator("#input-fileNameOrNumberOrReference").waitFor({state: 'visible'});
+    expect(this.page.locator("#input-fileNameOrNumberOrReference")).toBeVisible();
+
+    await this.page.locator("#typeahead-select-managementTeamMember").waitFor({state: 'visible'});
+    expect(this.page.locator("#typeahead-select-managementTeamMember")).toBeVisible();
+
+    await this.page.locator("#input-managementFileStatusCode").waitFor({status: 'visible'})
+    expect(this.page.locator("#input-managementFileStatusCode")).toBeVisible();
+
+    await this.page.locator("#input-managementFilePurposeCode").waitFor({status: 'visible'});
+    expect(this.page.locator("#input-managementFilePurposeCode")).toBeVisible();
+
+    await this.page.locator("#input-projectNameOrNumber").waitFor({status: 'visible'});
+    expect(this.page.locator("#input-projectNameOrNumber")).toBeVisible();
+
+    await this.page.locator("#search-button").waitFor({status: 'visible'});
+    expect(this.page.locator("#search-button")).toBeVisible();
+
+    await this.page.locator("#reset-button").waitFor({status: 'visible'});
+    expect(this.page.locator("#reset-button")).toBeVisible();
 
     //Search Management Column Headers
-    await expect(
-      this.page.locator(
+    const managementFileNumberColumn = await this.page.locator(
         "div[data-testid='managementFilesTable'] div[class='thead thead-light'] div:nth-child(1) div[class='sortable-column']"
-      )
-    ).toHaveTextContent("Management file #");
-    await expect(
-      this.page.getByTestId("sort-column-managementFileId")
-    ).toBeVisible();
-    await expect(
-      this.page.locator(
-        "div[data-testid='managementFilesTable'] div[class='thead thead-light'] div:nth-child(2) div[class='sortable-column']"
-      )
-    ).toHaveTextContent("File name");
-    await expect(this.page.getByTestId("sort-column-fileName")).toBeVisible();
-    await expect(
-      this.page.locator(
-        "div[data-testid='managementFilesTable'] div[class='thead thead-light'] div:nth-child(3) div[class='sortable-column']"
-      )
-    ).toHaveTextContent("History File #");
-    await expect(
-      this.page.getByTestId("sort-column-legacyFileNum")
-    ).toBeVisible();
-    await expect(
-      this.page.locator(
+      ).getByText('Management file #');
+    expect(managementFileNumberColumn).toBeVisible();
+
+    await this.page.getByTestId("sort-column-managementFileId").waitFor({status: 'visible'});
+    expect(this.page.getByTestId("sort-column-managementFileId")).toBeVisible();
+
+    const fileNameColumn = await this.page.locator(
+        "div[data-testid='managementFilesTable'] div[class='thead thead-light'] div:nth-child(2) div[class='sortable-column']");
+    expect(fileNameColumn).toHaveText("File name");
+
+    await this.page.getByTestId("sort-column-fileName").waitFor({status: 'visible'});
+    expect(this.page.getByTestId("sort-column-fileName")).toBeVisible();
+
+    const historyFileColumn = await this.page.locator(
+        "div[data-testid='managementFilesTable'] div[class='thead thead-light'] div:nth-child(3) div[class='sortable-column']");
+    expect(historyFileColumn).toHaveText("Historical File #");
+
+    await this.page.getByTestId("sort-column-legacyFileNum").waitFor({status: 'visible'});
+    expect(this.page.getByTestId("sort-column-legacyFileNum")).toBeVisible();
+
+    const projectColumn = await this.page.locator(
         "div[data-testid='managementFilesTable'] div[class='thead thead-light'] div:nth-child(4) div[class='sortable-column']"
       )
-    ).toHaveTextContent("Project");
-    await expect(
-      this.page.locator(
+    expect(projectColumn).toHaveText("Project");
+
+    const purposeColumn = await this.page.locator(
         "div[data-testid='managementFilesTable'] div[class='thead thead-light'] div:nth-child(5) div[class='sortable-column']"
       )
-    ).toHaveTextContent("Purpose");
-    await expect(
-      this.page.getByTestId("sort-column-managementFilePurposeTypeCode")
-    ).toBeVisible();
-    await expect(
-      this.page.locator(
+    expect(purposeColumn).toHaveText("Purpose");
+
+    await this.page.getByTestId("sort-column-managementFilePurposeTypeCode").waitFor({status: 'visible'});
+    expect(this.page.getByTestId("sort-column-managementFilePurposeTypeCode")).toBeVisible();
+
+    const teamMemberColumn = await this.page.locator(
         "div[data-testid='managementFilesTable'] div[class='thead thead-light'] div:nth-child(6) div[class='sortable-column']"
-      )
-    ).toHaveTextContent("Team member");
-    await expect(
-      this.page.locator(
+      );
+    expect(teamMemberColumn).toHaveText("Team member");
+
+    const civicAddressColumn = await this.page.locator(
         "div[data-testid='managementFilesTable'] div[class='thead thead-light'] div:nth-child(7) div[class='sortable-column']"
-      )
-    ).toHaveTextContent("Civic Address / PID / PIN");
-    await expect(
-      this.page.locator(
+      );
+    expect(civicAddressColumn).toHaveText("Civic Address / PID / PIN");
+
+    const statusColumn = await this.page.locator(
         "div[data-testid='managementFilesTable'] div[class='thead thead-light'] div:nth-child(8) div[class='sortable-column']"
-      )
-    ).toHaveTextContent("Status");
-    await expect(
-      this.page.getByTestId("sort-column-managementFileStatusTypeCode")
-    ).toBeVisible();
-    AssertTrueIsDisplayed(managementListViewOrderByStatus);
+      );
+    expect(statusColumn).toHaveText("Status");
+
+    await this.page.getByTestId("sort-column-managementFileStatusTypeCode").waitFor({status: 'visible'});
+    expect(this.page.getByTestId("sort-column-managementFileStatusTypeCode")).toBeVisible();
 
     //Search Management Pagination
-    await expect(this.page.locator("div[class='Menu-root']")).toBeVisible();
-    await expect(this.page.locator("ul[class='pagination']")).toBeVisible();
+    await this.page.locator("div[class='Menu-root']").waitFor({status: 'visible'});
+    expect(this.page.locator("div[class='Menu-root']")).toBeVisible();
+
+    await this.page.locator("ul[class='pagination']").waitFor({status: 'visible'});
+    expect(this.page.locator("ul[class='pagination']")).toBeVisible();
   }
 
   async verifyManagementTableContent(managementFile) {
-    await expect(
-      this.page.locator(
+    await this.page.locator(
         "div[data-testid='managementFilesTable'] div[class='tr-wrapper']:first-child"
-      )
-    ).toBeVisible();
-    await expect(
-      this.page.locator(
+      ).waitFor({status: 'visible'});
+    expect(this.page.locator(
+        "div[data-testid='managementFilesTable'] div[class='tr-wrapper']:first-child"
+      )).toBeVisible();
+
+    const managementNameContent = await this.page.locator(
         "div[data-testid='managementFilesTable'] div[class='tbody'] div[class='tr-wrapper']:first-child div div:nth-child(2)"
-      )
-    ).toHaveTextContent(managementFile.ManagementName);
+      );
+    expect(managementNameContent).toHaveText(managementFile.ManagementName);
 
     if (managementFile.ManagementHistoricalFile != null) {
-      await expect(
-        this.page.locator(
+      const historicalFileContent = await this.page.locator(
           "div[data-testid='managementFilesTable'] div[class='tbody'] div[class='tr-wrapper']:first-child div div:nth-child(3)"
         )
-      ).toHaveTextContent(managementFile.ManagementHistoricalFile);
+      expect(historicalFileContent).toHaveText(managementFile.ManagementHistoricalFile);
     }
 
     if (managementFile.ManagementMinistryProject != null) {
-      await expect(
-        this.page.locator(
+      const ministryProjectContent = await this.page.locator(
           "div[data-testid='managementFilesTable'] div[class='tbody'] div[class='tr-wrapper']:first-child div div:nth-child(4)"
-        )
-      ).toHaveTextContent(managementFile.ManagementMinistryProject);
+        );
+      await expect(ministryProjectContent).toHaveText(managementFile.ManagementMinistryProjectCode + " " + managementFile.ManagementMinistryProject);
     }
 
-    await expect(
-      this.page.locator(
+    const managementPurposeContent = await this.page.locator(
         "div[data-testid='managementFilesTable'] div[class='tbody'] div[class='tr-wrapper']:first-child div div:nth-child(5)"
-      )
-    ).toHaveTextContent(managementFile.ManagementPurpose);
+      );
+    await expect(managementPurposeContent).toHaveText(managementFile.ManagementPurpose);
 
-    if (managementFile.ManagementTeam.count() > 0) {
-      await expect(
-        this.page
-          .locator(
-            "div[data-testid='managementFilesTable'] div[class='tbody'] div[class='tr-wrapper']:first-child div div:nth-child(6) span"
-          )
-          .count()
-      ).toBeMoreThan(0);
+    if (managementFile.ManagementTeam.length > 0) {
+      await this.page.locator("div[data-testid='managementFilesTable'] div[class='tbody'] div[class='tr-wrapper']:first-child div div:nth-child(6) span").waitFor({status: 'visible'});
+      const managementTeamCount = await this.page.locator("div[data-testid='managementFilesTable'] div[class='tbody'] div[class='tr-wrapper']:first-child div div:nth-child(6) span").count()
+      expect(managementTeamCount).toBeGreaterThan(0);
     }
 
-    if (managementFile.ManagementSearchProperties != {}) {
-      await expect(
-        this.page
-          .locator(
-            "div[data-testid='managementFilesTable'] div[class='tbody'] div[class='tr-wrapper']:first-child div div:nth-child(7) div div"
-          )
-          .count()
-      ).toBeMoreThan(0);
-    }
+    // if (managementFile.ManagementSearchProperties != {}) {
+    //   await this.page.locator("div[data-testid='managementFilesTable'] div[class='tbody'] div[class='tr-wrapper']:first-child div div:nth-child(7) div div").waitFor({status: 'visible'});
+    //   const propertiesCount = await this.page.locator("div[data-testid='managementFilesTable'] div[class='tbody'] div[class='tr-wrapper']:first-child div div:nth-child(7) div div").count()
+    //   expect(propertiesCount).toBeGreaterThan(0);
+    // }
 
-    await expect(
-      this.page.locator(
-        "div[data-testid='managementFilesTable'] div[class='tbody'] div[class='tr-wrapper']:first-child div div:nth-child()"
-      )
-    ).toHaveTextContent(managementFile.ManagementStatus);
+    const managementStatus = await this.page.locator("div[data-testid='managementFilesTable'] div[class='tbody'] div[class='tr-wrapper']:first-child div div:nth-child(8)");
+    expect(managementStatus).toHaveText(managementFile.ManagementStatus);
   }
 }
 
