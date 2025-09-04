@@ -15,7 +15,6 @@ import { PMBC_FullyAttributed_Feature_Properties } from '@/models/layers/parcelM
 import { PIMS_Property_Location_View } from '@/models/layers/pimsPropertyLocationView';
 
 import {
-  featuresetToMapProperty,
   filePropertyToLocationBoundaryDataset,
   getFilePropertyName,
   getLatLng,
@@ -165,37 +164,6 @@ describe('mapPropertyUtils', () => {
       const fileName = getFilePropertyName(mapProperty, skipName);
       expect(fileName.label).toEqual(expectedName.label);
       expect(fileName.value).toEqual(expectedName.value);
-    },
-  );
-
-  it.each([
-    [getMockSelectedFeatureDataset(), '', expectedMapProperty],
-    [{ ...getMockSelectedFeatureDataset(), pimsFeatures: {} as any }, '', expectedMapProperty],
-    [
-      { ...getMockSelectedFeatureDataset(), parcelFeature: {} as any },
-      '',
-      {
-        ...expectedMapProperty,
-        pid: undefined,
-        planNumber: undefined,
-        polygon: undefined,
-        landArea: 0,
-      },
-    ],
-    [
-      { ...getMockSelectedFeatureDataset(), pimsFeatures: {} as any },
-      'address',
-      { ...expectedMapProperty, address: 'address' },
-    ],
-  ])(
-    'featuresetToMapProperty test with feature set %o address %o expectedPropertyFile %o',
-    (
-      featureSet: SelectedFeatureDataset,
-      address: string = 'unknown',
-      expectedPropertyFile?: IMapProperty,
-    ) => {
-      const mapProperty = featuresetToMapProperty(featureSet, address);
-      expect(mapProperty).toEqual(expectedPropertyFile);
     },
   );
 

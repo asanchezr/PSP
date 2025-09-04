@@ -16,10 +16,6 @@ import { toast } from 'react-toastify';
 import { LocationBoundaryDataset, MapFeatureData } from '@/components/common/mapFSM/models';
 import { SelectedFeatureDataset } from '@/components/common/mapFSM/useLocationFeatureLoader';
 import { ONE_HUNDRED_METER_PRECISION } from '@/components/maps/constants';
-import { IMapProperty } from '@/components/propertySelector/models';
-import { AreaUnitTypes } from '@/constants';
-import { DistrictCodes } from '@/constants/districtCodes';
-import { RegionCodes } from '@/constants/regionCodes';
 import { AddressForm, PropertyForm } from '@/features/mapSideBar/shared/models';
 import { ApiGen_CodeTypes_GeoJsonTypes } from '@/models/api/generated/ApiGen_CodeTypes_GeoJsonTypes';
 import { ApiGen_Concepts_FileProperty } from '@/models/api/generated/ApiGen_Concepts_FileProperty';
@@ -28,7 +24,7 @@ import { ApiGen_Concepts_Property } from '@/models/api/generated/ApiGen_Concepts
 import { MOT_DistrictBoundary_Feature_Properties } from '@/models/layers/motDistrictBoundary';
 import { MOT_RegionalBoundary_Feature_Properties } from '@/models/layers/motRegionalBoundary';
 import { PMBC_FullyAttributed_Feature_Properties } from '@/models/layers/parcelMapBC';
-import { enumFromValue, exists, formatApiAddress, pidFormatter } from '@/utils';
+import { exists, formatApiAddress, pidFormatter } from '@/utils';
 
 export enum NameSourceType {
   PID = 'PID',
@@ -173,81 +169,6 @@ export const getFeatureBoundedCenter = (feature: Feature<Geometry, GeoJsonProper
     );
   }
 };
-
-export function featuresetToMapProperty(
-  featureSet: SelectedFeatureDataset,
-  address?: string,
-): IMapProperty {
-  if (!exists(featureSet)) {
-    return undefined;
-  }
-  const pimsFeature = featureSet?.pimsFeature;
-  const parcelFeature = featureSet?.parcelFeature;
-  const regionFeature = featureSet?.regionFeature;
-  const districtFeature = featureSet?.districtFeature;
-
-  const propertyId = pimsFeature?.properties?.PROPERTY_ID;
-  const pid = pidFromFeatureSet(featureSet);
-  const pin = pinFromFeatureSet(featureSet);
-
-  const formattedAddress = pimsFeature?.properties?.STREET_ADDRESS_1
-    ? formatApiAddress(AddressForm.fromPimsView(pimsFeature.properties).toApi())
-    : undefined;
-
-  const commonFeature = {
-    propertyId: propertyId ? Number.parseInt(propertyId?.toString()) : undefined,
-    pid: pid ?? undefined,
-    pin: pin ?? undefined,
-    latitude: featureSet?.location?.lat,
-    longitude: featureSet?.location?.lng,
-    fileLocation: featureSet?.fileLocation ?? featureSet?.location ?? undefined,
-    region: isNumber(regionFeature?.properties?.REGION_NUMBER)
-      ? regionFeature?.properties?.REGION_NUMBER
-      : RegionCodes.Unknown,
-    regionName: regionFeature?.properties?.REGION_NAME ?? 'Cannot determine',
-    district: isNumber(districtFeature?.properties?.DISTRICT_NUMBER)
-      ? districtFeature?.properties?.DISTRICT_NUMBER
-      : DistrictCodes.Unknown,
-    districtName: districtFeature?.properties?.DISTRICT_NAME ?? 'Cannot determine',
-  };
-  if (exists(pimsFeature?.properties)) {
-    return {
-      ...commonFeature,
-      polygon:
-        pimsFeature?.geometry?.type === ApiGen_CodeTypes_GeoJsonTypes.Polygon
-          ? (pimsFeature.geometry as Polygon)
-          : pimsFeature?.geometry?.type === ApiGen_CodeTypes_GeoJsonTypes.MultiPolygon
-          ? (pimsFeature.geometry as MultiPolygon)
-          : parcelFeature?.geometry?.type === ApiGen_CodeTypes_GeoJsonTypes.Polygon
-          ? (parcelFeature.geometry as Polygon)
-          : parcelFeature?.geometry?.type === ApiGen_CodeTypes_GeoJsonTypes.MultiPolygon
-          ? (parcelFeature.geometry as MultiPolygon)
-          : undefined,
-      planNumber: pimsFeature?.properties?.SURVEY_PLAN_NUMBER ?? undefined,
-      address: address ?? formattedAddress ?? undefined,
-      legalDescription: pimsFeature?.properties?.LAND_LEGAL_DESCRIPTION ?? undefined,
-      areaUnit: pimsFeature?.properties?.PROPERTY_AREA_UNIT_TYPE_CODE
-        ? enumFromValue(pimsFeature?.properties?.PROPERTY_AREA_UNIT_TYPE_CODE, AreaUnitTypes)
-        : AreaUnitTypes.SquareMeters,
-      landArea: pimsFeature?.properties?.LAND_AREA ? +pimsFeature?.properties?.LAND_AREA : 0,
-    };
-  } else {
-    return {
-      ...commonFeature,
-      polygon:
-        parcelFeature?.geometry?.type === ApiGen_CodeTypes_GeoJsonTypes.Polygon
-          ? (parcelFeature.geometry as Polygon)
-          : parcelFeature?.geometry?.type === ApiGen_CodeTypes_GeoJsonTypes.MultiPolygon
-          ? (parcelFeature.geometry as MultiPolygon)
-          : undefined,
-      planNumber: parcelFeature?.properties?.PLAN_NUMBER ?? undefined,
-      address: address ?? formattedAddress ?? undefined,
-      legalDescription: parcelFeature?.properties?.LEGAL_DESCRIPTION ?? undefined,
-      areaUnit: AreaUnitTypes.SquareMeters,
-      landArea: parcelFeature?.properties?.FEATURE_AREA_SQM ?? 0,
-    };
-  }
-}
 
 export const featuresetToLocationBoundaryDataset = (
   featureSet: SelectedFeatureDataset,
