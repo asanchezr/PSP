@@ -99,7 +99,10 @@ export const SelectedPropertyRow: React.FunctionComponent<ISelectedPropertyRowPr
           </StyledIconButton>
         </Col>
         <Col xs="auto">
-          <LinkButton onClick={() => onZoomToProperty(property)}>
+          <LinkButton
+            onClick={() => onZoomToProperty(property)}
+            data-testid={'zoom-to-property-' + index}
+          >
             <FaSearchPlus size={18} className="mr-5" />
           </LinkButton>
         </Col>

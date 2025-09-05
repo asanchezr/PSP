@@ -6,7 +6,10 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import { useMapProperties } from '@/hooks/repositories/useMapProperties';
-import { getMockSelectedFeatureDataset } from '@/mocks/featureset.mock';
+import {
+  getMockLocationFeatureDataset,
+  getMockSelectedFeatureDataset,
+} from '@/mocks/featureset.mock';
 import { mockFAParcelLayerResponse, mockGeocoderOptions } from '@/mocks/index.mock';
 import { mapMachineBaseMock } from '@/mocks/mapFSM.mock';
 import { act, fillInput, render, RenderOptions, screen, userEvent } from '@/utils/test-utils';
@@ -42,7 +45,7 @@ vi.mocked(useMapProperties).mockReturnValue({
 });
 
 describe('MapSelectorContainer component', () => {
-  const setup = (renderOptions: RenderOptions & Partial<IMapSelectorContainerProps>) => {
+  const setup = async (renderOptions: RenderOptions & Partial<IMapSelectorContainerProps>) => {
     // render component under test
     const utils = render(
       <Formik initialValues={{ properties: [] }} onSubmit={noop}>
@@ -61,6 +64,8 @@ describe('MapSelectorContainer component', () => {
       },
     );
 
+    await act(async () => {});
+
     return {
       store,
       ...utils,
@@ -76,28 +81,28 @@ describe('MapSelectorContainer component', () => {
   });
 
   it('renders as expected when provided no properties', async () => {
-    const { asFragment } = setup({});
+    const { asFragment } = await setup({});
     await act(async () => {
       expect(asFragment()).toMatchSnapshot();
     });
   });
 
   it('displays two tabs', async () => {
-    const { getByText } = setup({});
+    const { getByText } = await setup({});
     await act(async () => {
       expect(getByText('Locate on Map')).toBeVisible();
     });
   });
 
   it('displays locate on Map by default', async () => {
-    const { getByText } = setup({});
+    const { getByText } = await setup({});
     await act(async () => {
       expect(getByText('Locate on Map')).toHaveClass('active');
     });
   });
 
   it('allows the search tab to be selected', async () => {
-    const { getByText } = setup({});
+    const { getByText } = await setup({});
     const searchTab = getByText('Search');
     await act(async () => userEvent.click(searchTab));
     expect(searchTab).toHaveClass('active');
@@ -105,7 +110,7 @@ describe('MapSelectorContainer component', () => {
 
   it('displays all selected property attributes', async () => {
     const mockFeatureSet = getMockSelectedFeatureDataset();
-    const { getByText } = setup({
+    const { getByText } = await setup({
       modifiedProperties: [
         {
           ...mockFeatureSet,
@@ -151,7 +156,7 @@ describe('MapSelectorContainer component', () => {
 
   it('selected properties display a warning if added', async () => {
     const mockFeatureSet = getMockSelectedFeatureDataset();
-    const { getByText, getByTitle, findByTestId, container } = setup({
+    const { getByText, getByTitle, findByTestId, container } = await setup({
       modifiedProperties: [
         {
           ...mockFeatureSet,
@@ -191,7 +196,7 @@ describe('MapSelectorContainer component', () => {
 
   it('selected properties display a warning if added multiple times', async () => {
     const mockFeatureSet = getMockSelectedFeatureDataset();
-    const { getByText, getByTitle, findByTestId, container } = setup({
+    const { getByText, getByTitle, findByTestId, container } = await setup({
       modifiedProperties: [
         {
           ...mockFeatureSet,
@@ -236,10 +241,16 @@ describe('MapSelectorContainer component', () => {
     expect(toast[0]).toBeVisible();
   });
 
-  // TODO: Fix this test
-  it.skip(`calls "repositionSelectedProperty" callback when file marker has been repositioned`, async () => {
+  it(`calls "repositionSelectedProperty" callback when file marker has been repositioned`, async () => {
     const mockFeatureSet = getMockSelectedFeatureDataset();
-    const testMapMock: IMapStateMachineContext = { ...mapMachineBaseMock };
+
+    // simulate file marker repositioning via the map state machine
+    const testMapMock: IMapStateMachineContext = {
+      ...mapMachineBaseMock,
+      isRepositioning: true,
+      repositioningFeatureDataset: {} as any,
+      mapLocationFeatureDataset: {} as any,
+    };
     const mapProperties = [
       {
         ...mockFeatureSet,
@@ -258,7 +269,7 @@ describe('MapSelectorContainer component', () => {
       },
     ];
 
-    const { rerender } = setup({
+    const { rerender } = await setup({
       modifiedProperties: mapProperties,
       mockMapMachine: testMapMock,
     });
@@ -266,8 +277,8 @@ describe('MapSelectorContainer component', () => {
     // simulate file marker repositioning via the map state machine
     await act(async () => {
       testMapMock.isRepositioning = true;
-      testMapMock.repositioningFeatureDataset = {} as any;
-      testMapMock.mapLocationFeatureDataset = {} as any;
+      testMapMock.repositioningFeatureDataset = getMockSelectedFeatureDataset();
+      testMapMock.mapLocationFeatureDataset = getMockLocationFeatureDataset();
     });
 
     rerender(
