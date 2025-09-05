@@ -201,39 +201,39 @@ export function planFromFullyAttributedFeature(
 }
 
 export function pidFromFeatureSet(featureset: SelectedFeatureDataset): string | null {
-  if (exists(featureset.pimsFeature?.properties)) {
-    return exists(featureset.pimsFeature?.properties?.PID_PADDED)
-      ? featureset.pimsFeature?.properties?.PID_PADDED?.toString()
+  if (exists(featureset?.pimsFeature?.properties)) {
+    return exists(featureset?.pimsFeature?.properties?.PID_PADDED)
+      ? featureset?.pimsFeature?.properties?.PID_PADDED?.toString()
       : null;
   }
 
-  return pidFromFullyAttributedFeature(featureset.parcelFeature);
+  return pidFromFullyAttributedFeature(featureset?.parcelFeature);
 }
 
 export function pinFromFeatureSet(featureset: SelectedFeatureDataset): string | null {
-  if (exists(featureset.pimsFeature?.properties)) {
-    return exists(featureset.pimsFeature?.properties?.PIN)
-      ? featureset.pimsFeature?.properties?.PIN?.toString()
+  if (exists(featureset?.pimsFeature?.properties)) {
+    return exists(featureset?.pimsFeature?.properties?.PIN)
+      ? featureset?.pimsFeature?.properties?.PIN?.toString()
       : null;
   }
 
-  return pinFromFullyAttributedFeature(featureset.parcelFeature);
+  return pinFromFullyAttributedFeature(featureset?.parcelFeature);
 }
 
 export function planFromFeatureSet(featureset: SelectedFeatureDataset): string | null {
-  if (exists(featureset.pimsFeature?.properties)) {
-    return exists(featureset.pimsFeature?.properties?.SURVEY_PLAN_NUMBER)
-      ? featureset.pimsFeature?.properties?.SURVEY_PLAN_NUMBER?.toString()
+  if (exists(featureset?.pimsFeature?.properties)) {
+    return exists(featureset?.pimsFeature?.properties?.SURVEY_PLAN_NUMBER)
+      ? featureset?.pimsFeature?.properties?.SURVEY_PLAN_NUMBER?.toString()
       : null;
   }
 
-  return planFromFullyAttributedFeature(featureset.parcelFeature);
+  return planFromFullyAttributedFeature(featureset?.parcelFeature);
 }
 
 export function addressFromFeatureSet(featureset: SelectedFeatureDataset): string | null {
-  if (exists(featureset.pimsFeature?.properties)) {
-    return exists(featureset.pimsFeature?.properties?.STREET_ADDRESS_1)
-      ? formatApiAddress(AddressForm.fromPimsView(featureset.pimsFeature?.properties).toApi())
+  if (exists(featureset?.pimsFeature?.properties)) {
+    return exists(featureset?.pimsFeature?.properties?.STREET_ADDRESS_1)
+      ? formatApiAddress(AddressForm.fromPimsView(featureset?.pimsFeature?.properties).toApi())
       : null;
   }
 
