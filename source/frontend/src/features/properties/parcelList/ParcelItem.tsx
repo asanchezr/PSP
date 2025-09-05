@@ -218,7 +218,7 @@ export function ParcelItem({ parcel, onRemove, canAddToWorklist, parcelIndex }: 
   ]);
 
   return (
-    <StyledRow data-testId={`search-property-${parcelIndex}`}>
+    <StyledRow data-testid={`search-property-${parcelIndex}`}>
       <StyledPidCol
         onClick={e => {
           e.preventDefault();
