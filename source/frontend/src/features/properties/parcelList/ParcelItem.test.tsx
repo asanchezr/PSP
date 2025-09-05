@@ -15,9 +15,13 @@ describe('ParcelItem component', () => {
   const setup = (renderOptions: RenderOptions & { props?: Partial<IParcelItemProps> } = {}) => {
     return render(
       <ParcelItem
-        parcel={renderOptions.props?.parcel ?? getMockWorklistParcel('parcel-1', { PID: '123456789' })}
+        parcel={
+          renderOptions.props?.parcel ?? getMockWorklistParcel('parcel-1', { PID: '123456789' })
+        }
         onRemove={onRemove}
-        canAddToWorklist={renderOptions.props?.canAddToWorklist ?? true} parcelIndex={0}      />,
+        canAddToWorklist={renderOptions.props?.canAddToWorklist ?? true}
+        parcelIndex={0}
+      />,
       { ...renderOptions },
     );
   };
