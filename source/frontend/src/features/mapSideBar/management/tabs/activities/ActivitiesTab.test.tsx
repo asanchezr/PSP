@@ -1,7 +1,12 @@
-
 import Claims from '@/constants/claims';
 
-import { cleanup, getMockRepositoryObj, render, RenderOptions, waitForEffects } from '@/utils/test-utils';
+import {
+  cleanup,
+  getMockRepositoryObj,
+  render,
+  RenderOptions,
+  waitForEffects,
+} from '@/utils/test-utils';
 import ActivitiesTab, { IActivitiesTabProps } from './ActivitiesTab';
 import { mockManagementFileResponse } from '@/mocks/managementFiles.mock';
 import { ApiGen_CodeTypes_ManagementFileStatusTypes } from '@/models/api/generated/ApiGen_CodeTypes_ManagementFileStatusTypes';
@@ -26,14 +31,13 @@ vi.mock('@/hooks/repositories/useManagementActivityRepository', () => ({
   },
 }));
 
-
 describe('ManagementSummaryView component', () => {
   // render component under test
-  const setup = async (
-    renderOptions: RenderOptions & { props?: Partial<IActivitiesTabProps> },
-  ) => {
+  const setup = async (renderOptions: RenderOptions & { props?: Partial<IActivitiesTabProps> }) => {
     const utils = render(
-      <ActivitiesTab managementFile={renderOptions?.props?.managementFile ?? mockManagementFileApi}      />,
+      <ActivitiesTab
+        managementFile={renderOptions?.props?.managementFile ?? mockManagementFileApi}
+      />,
       {
         ...renderOptions,
         useMockAuthentication: true,
