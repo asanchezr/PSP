@@ -51,5 +51,10 @@ namespace Pims.Dal.Entities.Models
         /// get/set - The management file purpose.
         /// </summary>
         public string ManagementFilePurposeCode { get; set; }
+
+        /// <summary>
+        /// get/set - The ministry region to filter by.
+        /// </summary>
+        public short? RegionCode { get; set; }
     }
 }

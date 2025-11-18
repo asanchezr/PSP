@@ -52,6 +52,11 @@ namespace Pims.Api.Areas.Management.Models
         /// </summary>
         public string ManagementFilePurposeCode { get; set; }
 
+        /// <summary>
+        /// get/set - The ministry region to filter by.
+        /// </summary>
+        public short? RegionCode { get; set; }
+
         public ManagementActivityFilterModel()
         {
         }
@@ -70,6 +75,7 @@ namespace Pims.Api.Areas.Management.Models
             ProjectNameOrNumber = filter.GetStringValue(nameof(ProjectNameOrNumber));
             ManagementFileStatusCode = filter.GetStringValue(nameof(ManagementFileStatusCode));
             ManagementFilePurposeCode = filter.GetStringValue(nameof(ManagementFilePurposeCode));
+            RegionCode = filter.GetShortNullValue(nameof(RegionCode));
         }
 
         /// <summary>
@@ -92,6 +98,7 @@ namespace Pims.Api.Areas.Management.Models
                 ProjectNameOrNumber = model.ProjectNameOrNumber,
                 ManagementFileStatusCode = model.ManagementFileStatusCode,
                 ManagementFilePurposeCode = model.ManagementFilePurposeCode,
+                RegionCode = model.RegionCode,
 
                 Sort = model.Sort,
             };
