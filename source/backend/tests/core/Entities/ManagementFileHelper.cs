@@ -15,7 +15,7 @@ namespace Pims.Core.Test
         /// Create a new instance of an Management file.
         /// </summary>
         /// <returns></returns>
-        public static Entity.PimsManagementFile CreateManagementFile(long? managementFileId = null, string name = null, PimsManagementFileStatusType statusType = null)
+        public static Entity.PimsManagementFile CreateManagementFile(long? managementFileId = null, string name = null, PimsManagementFileStatusType statusType = null, short? regionCode = null)
         {
             var managementFile = new Entity.PimsManagementFile()
             {
@@ -27,6 +27,11 @@ namespace Pims.Core.Test
             managementFile.ManagementFileStatusTypeCodeNavigation = statusType ?? new Entity.PimsManagementFileStatusType() { Id = "ACTIVE", Description = "Active", DbCreateUserid = "create user", DbLastUpdateUserid = "last user" };
             managementFile.ManagementFilePurposeTypeCodeNavigation = new PimsManagementFilePurposeType() { Id = "Purpose", DbCreateUserid = "create user", DbLastUpdateUserid = "last user", Description = "description" };
             managementFile.AcquisitionFundingTypeCodeNavigation = new PimsAcquisitionFundingType() { Id = "Funded", DbCreateUserid = "create user", DbLastUpdateUserid = "last user", Description = "description" };
+
+            if (regionCode.HasValue)
+            {
+                managementFile.RegionCode = regionCode.Value;
+            }
 
             return managementFile;
         }

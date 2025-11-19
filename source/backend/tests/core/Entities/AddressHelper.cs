@@ -14,10 +14,12 @@ namespace Pims.Core.Test
         /// Create a new instance of an Address.
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="region"></param>
         /// <returns></returns>
-        public static Entity.PimsAddress CreateAddress(long id)
+        public static Entity.PimsAddress CreateAddress(long id, Entity.PimsRegion region = null)
         {
-            return CreateAddress(id, "1234 St", string.Empty, string.Empty, null, null, "V9V9V9");
+            Entity.PimsDistrict district = region is null ? null : EntityHelper.CreateDistrict((short)id, "District 1", region);
+            return CreateAddress(id, "1234 St", string.Empty, string.Empty, null, district: district, "V9V9V9");
         }
 
         /// <summary>

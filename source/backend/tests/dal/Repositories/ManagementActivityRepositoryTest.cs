@@ -19,6 +19,10 @@ namespace Pims.Dal.Test.Repositories
     public class ManagementActivityRepositoryTest
     {
         private TestHelper _helper;
+        private PimsContext _context
+        {
+            get => _helper.GetService<PimsContext>();
+        }
 
         public ManagementActivityRepositoryTest()
         {
@@ -30,6 +34,13 @@ namespace Pims.Dal.Test.Repositories
             var user = PrincipalHelper.CreateForPermission(permissions);
             _helper.CreatePimsContext(user, true);
             return _helper.CreateRepository<ManagementActivityRepository>(user);
+        }
+
+        private void SeedRegions()
+        {
+            var regions = EntityHelper.CreateDefaultRegions();
+            _context.AddRange(regions);
+            _context.SaveChanges();
         }
 
         #region Tests
@@ -299,6 +310,71 @@ namespace Pims.Dal.Test.Repositories
 
             // Assert
             result.Should().HaveCount(1);
+        }
+
+        [Fact]
+        public void SearchManagementActivities_FilterByRegionCode_PropertyRegion()
+        {
+            // Arrange
+            var repository = CreateRepositoryWithPermissions(Permissions.ManagementView);
+            SeedRegions();
+
+            var northern = _context.PimsRegions.FirstOrDefault(r => r.RegionCode == 1);
+            var property = EntityHelper.CreateProperty(1, 2, address: EntityHelper.CreateAddress(1, region: northern)); // Northern region
+            var activity = EntityHelper.CreateManagementActivity(1);
+            activity.PimsManagementActivityProperties = new List<PimsManagementActivityProperty>()
+            {
+                new() { Property = property, PropertyId = property.Internal_Id }
+            };
+            _helper.AddAndSaveChanges(activity);
+
+            // Act
+            var result = repository.SearchManagementActivities(new ManagementActivityFilter() { RegionCode = 1 });
+
+            // Assert
+            result.Should().HaveCount(1);
+            result.First().PimsManagementActivityProperties.First().Property.RegionCode.Should().Be(1);
+        }
+
+        [Fact]
+        public void SearchManagementActivities_FilterByRegionCode_ManagementFileRegion()
+        {
+            // Arrange
+            var repository = CreateRepositoryWithPermissions(Permissions.ManagementView);
+            var managementFile = EntityHelper.CreateManagementFile(1, regionCode: 2); // Southern Interior
+            var activity = EntityHelper.CreateManagementActivity(1);
+            activity.ManagementFile = managementFile;
+            _helper.AddAndSaveChanges(activity);
+
+            // Act
+            var result = repository.SearchManagementActivities(new ManagementActivityFilter() { RegionCode = 2 });
+
+            // Assert
+            result.Should().HaveCount(1);
+            result.First().ManagementFile.RegionCode.Should().Be(2);
+        }
+
+        [Fact]
+        public void SearchManagementActivities_FilterByRegionCode_NoMatch_ReturnsEmpty()
+        {
+            // Arrange
+            var repository = CreateRepositoryWithPermissions(Permissions.ManagementView);
+            SeedRegions();
+
+            var northern = _context.PimsRegions.FirstOrDefault(r => r.RegionCode == 1);
+            var property = EntityHelper.CreateProperty(1, 2, address: EntityHelper.CreateAddress(1, region: northern)); // Northern region
+            var activity = EntityHelper.CreateManagementActivity(1);
+            activity.PimsManagementActivityProperties = new List<PimsManagementActivityProperty>()
+            {
+                new() { Property = property, PropertyId = property.Internal_Id }
+            };
+            _helper.AddAndSaveChanges(activity);
+
+            // Act
+            var result = repository.SearchManagementActivities(new ManagementActivityFilter() { RegionCode = 3 }); // South Coast
+
+            // Assert
+            result.Should().BeEmpty();
         }
         #endregion
 
