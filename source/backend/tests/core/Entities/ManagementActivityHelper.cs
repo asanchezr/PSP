@@ -62,5 +62,35 @@ namespace Pims.Core.Test
 
             return managementActivity;
         }
+
+        /// <summary>
+        /// Return an instance of a Property Management Activity Invoice.
+        /// </summary>
+        /// <param name="invoiceId"></param>
+        /// <param name="managementActivityId"></param>
+        /// <param name="pretaxAmt"></param>
+        /// <param name="gstAmt"></param>
+        /// <param name="pstAmt"></param>
+        /// <returns>New Instance of PimsManagementActivityInvoice.</returns>
+        public static PimsManagementActivityInvoice CreateManagementActivityInvoice(long invoiceId, long? managementActivityId = null, decimal? pretaxAmt = null, decimal? gstAmt = null, decimal? pstAmt = null)
+        {
+            decimal pretaxValue = pretaxAmt ?? 1000.00M;
+            decimal gstValue = pretaxValue * 0.05M;
+            decimal pstValue = pstAmt ?? 0.00M;
+
+            PimsManagementActivityInvoice managementActivityInvoice = new PimsManagementActivityInvoice()
+            {
+                Internal_Id = invoiceId,
+                ManagementActivityId = managementActivityId ?? 1,
+                InvoiceNum = "INV-001",
+                Description = "Test Management Activity Invoice",
+                PretaxAmt = pretaxValue,
+                GstAmt = gstValue,
+                PstAmt = pstValue,
+                TotalAmt = pretaxValue + gstValue + pstValue,
+            };
+
+            return managementActivityInvoice;
+        }
     }
 }

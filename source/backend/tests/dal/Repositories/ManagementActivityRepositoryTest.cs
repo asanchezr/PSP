@@ -278,7 +278,7 @@ namespace Pims.Dal.Test.Repositories
         }
         #endregion
 
-        #region SearchManagementActivities
+        #region Reports / SearchManagementActivities
         [Fact]
         public void SearchManagementActivities_FilterByAddress()
         {
@@ -302,7 +302,7 @@ namespace Pims.Dal.Test.Repositories
         }
         #endregion
 
-        #region SearchManagementActivityInvoices
+        #region Reports / SearchManagementActivityInvoices
         [Fact]
         public void SearchManagementActivityInvoices_FilterByFileName()
         {
